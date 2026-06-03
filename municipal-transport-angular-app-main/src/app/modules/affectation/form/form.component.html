@@ -1,0 +1,111 @@
+<c-card class="mb-4" style="max-width:750px; margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2"
+    style="background: linear-gradient(135deg,{{ isEdit ? '#f9a825,#e65100' : '#321fdb,#6f42c1' }}); color:white">
+    <span style="font-size:1.3rem">{{ isEdit ? '✏️' : '📋' }}</span>
+    <strong class="fs-5 mb-0">{{ isEdit ? 'Modifier' : 'Créer' }} une affectation</strong>
+  </c-card-header>
+
+  <c-card-body>
+
+    @if (errorMsg) {
+      <div class="alert alert-danger d-flex align-items-center gap-2">
+        <span>⚠️</span> {{ errorMsg }}
+      </div>
+    }
+
+    <form #form="ngForm" (ngSubmit)="save(form)" novalidate>
+
+      <!-- Ressources -->
+      <div class="p-3 mb-3 rounded" style="background:#ede8ff; border-left:4px solid #321fdb">
+        <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Ressources</h6>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">👤 Chauffeur *</label>
+            <select cSelect name="chauffeurId" [(ngModel)]="affectation.chauffeurId" required
+              [class.is-invalid]="form.submitted && form.controls['chauffeurId']?.invalid">
+              <option [ngValue]="0" disabled>-- Sélectionner --</option>
+              <option *ngFor="let c of chauffeurs" [ngValue]="c.id">
+                {{ c.prenom }} {{ c.nom }} ({{ c.matricule }})
+              </option>
+            </select>
+            <div class="invalid-feedback">Chauffeur requis</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">🚌 Véhicule *</label>
+            <select cSelect name="vehiculeId" [(ngModel)]="affectation.vehiculeId" required
+              [class.is-invalid]="form.submitted && form.controls['vehiculeId']?.invalid">
+              <option [ngValue]="0" disabled>-- Sélectionner --</option>
+              <option *ngFor="let v of vehicules" [ngValue]="v.id">
+                {{ v.marque }} {{ v.modele }} ({{ v.matriculeFourni }})
+                <span *ngIf="!v.vehiculeDispo"> — INDISPONIBLE</span>
+              </option>
+            </select>
+            <div class="invalid-feedback">Véhicule requis</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">🛤️ Ligne *</label>
+            <select cSelect name="ligneId" [(ngModel)]="affectation.ligneId" required
+              [class.is-invalid]="form.submitted && form.controls['ligneId']?.invalid">
+              <option [ngValue]="0" disabled>-- Sélectionner --</option>
+              <option *ngFor="let l of lignes" [ngValue]="l.id">
+                {{ l.numero }} — {{ l.destination }}
+              </option>
+            </select>
+            <div class="invalid-feedback">Ligne requise</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Période -->
+      <div class="p-3 mb-3 rounded" style="background:#fff8e1; border-left:4px solid #f9a825">
+        <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Période</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">📅 Date début *</label>
+            <input cFormControl type="datetime-local" name="dateDebut"
+              [(ngModel)]="affectation.dateDebut" required
+              [class.is-invalid]="form.submitted && form.controls['dateDebut']?.invalid">
+            <div class="invalid-feedback">Date de début requise</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">📅 Date fin *</label>
+            <input cFormControl type="datetime-local" name="dateFin"
+              [(ngModel)]="affectation.dateFin" required
+              [class.is-invalid]="form.submitted && form.controls['dateFin']?.invalid">
+            <div class="invalid-feedback">Date de fin requise</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paramètres -->
+      <div class="p-3 mb-4 rounded" style="background:#f8f9fa; border-left:4px solid #6c757d">
+        <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Paramètres</h6>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Statut</label>
+            <select cSelect name="statut" [(ngModel)]="affectation.statut">
+              <option value="PLANIFIEE">Planifiée</option>
+              <option value="EN_COURS">En cours</option>
+              <option value="TERMINEE">Terminée</option>
+              <option value="ANNULEE">Annulée</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold">💬 Remarque</label>
+            <textarea cFormControl name="remarque" [(ngModel)]="affectation.remarque"
+              rows="2" placeholder="Observations éventuelles..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button cButton color="secondary" type="button" routerLink="/affectations">Annuler</button>
+        <button cButton [color]="isEdit ? 'warning' : 'primary'" type="submit" [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ loading ? 'Sauvegarde...' : (isEdit ? '💾 Mettre à jour' : '✅ Créer l\'affectation') }}
+        </button>
+      </div>
+
+    </form>
+  </c-card-body>
+</c-card>

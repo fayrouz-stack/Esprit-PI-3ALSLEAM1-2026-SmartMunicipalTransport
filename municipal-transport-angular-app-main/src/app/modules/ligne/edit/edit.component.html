@@ -1,0 +1,42 @@
+<c-card class="mb-4" style="max-width:600px; margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2" style="background: linear-gradient(135deg,#f9a825,#e65100); color:white">
+    <span style="font-size:1.3rem">✏️</span>
+    <strong class="fs-5 mb-0">Modifier la ligne</strong>
+  </c-card-header>
+
+  <c-card-body>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="numero">Numéro de ligne *</label>
+        <input
+          cFormControl
+          id="numero"
+          type="text"
+          formControlName="numero"
+          [class.is-invalid]="form.get('numero')?.invalid && form.get('numero')?.touched">
+        <div class="invalid-feedback">Le numéro est requis</div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold" for="destination">Destination *</label>
+        <input
+          cFormControl
+          id="destination"
+          type="text"
+          formControlName="destination"
+          [class.is-invalid]="form.get('destination')?.invalid && form.get('destination')?.touched">
+        <div class="invalid-feedback">La destination est requise</div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button cButton color="secondary" type="button" routerLink="/lignes/list">Annuler</button>
+        <button cButton color="warning" type="submit" [disabled]="submitting || form.invalid">
+          <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
+          {{ submitting ? 'Enregistrement...' : '💾 Enregistrer' }}
+        </button>
+      </div>
+
+    </form>
+  </c-card-body>
+</c-card>

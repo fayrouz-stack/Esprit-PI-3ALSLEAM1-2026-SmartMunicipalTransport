@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "author": "Municipal Transport IoT",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-v1", "id": "esp32", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-pir-motion-sensor", "id": "pir1", "top": -80, "left": 200, "attrs": {} },
+    { "type": "wokwi-lcd1602", "id": "lcd1", "top": 160, "left": -100, "attrs": { "pins": "i2c", "i2cAddress": "0x27" } },
+    { "type": "wokwi-led", "id": "led_red",   "top": 80, "left": 240, "attrs": { "color": "red" } },
+    { "type": "wokwi-led", "id": "led_green", "top": 80, "left": 280, "attrs": { "color": "green" } },
+    { "type": "wokwi-buzzer", "id": "buz1", "top": 80, "left": 320, "attrs": { "volume": "0.5" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": 110, "left": 240, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r2", "top": 110, "left": 280, "attrs": { "value": "220" } }
+  ],
+  "connections": [
+    ["esp32:GND.1", "lcd1:GND",    "black",  []],
+    ["esp32:3V3",   "lcd1:VCC",    "red",    []],
+    ["esp32:D21",   "lcd1:SDA",    "blue",   []],
+    ["esp32:D22",   "lcd1:SCL",    "yellow", []],
+    ["esp32:GND.1", "pir1:GND",   "black",  []],
+    ["esp32:3V3",   "pir1:VCC",   "red",    []],
+    ["esp32:D13",   "pir1:OUT",   "orange", []],
+    ["esp32:D2",    "r1:1",       "red",    []],
+    ["r1:2",        "led_red:A",  "red",    []],
+    ["led_red:K",   "esp32:GND.1","black",  []],
+    ["esp32:D5",    "r2:1",       "green",  []],
+    ["r2:2",        "led_green:A","green",  []],
+    ["led_green:K", "esp32:GND.1","black",  []],
+    ["esp32:D18",   "buz1:1",     "purple", []],
+    ["buz1:2",      "esp32:GND.1","black",  []]
+  ],
+  "dependencies": {}
+}

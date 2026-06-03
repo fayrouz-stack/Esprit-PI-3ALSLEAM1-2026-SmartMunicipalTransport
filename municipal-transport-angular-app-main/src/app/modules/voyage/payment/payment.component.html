@@ -1,0 +1,116 @@
+<div class="card">
+  <div class="card-header bg-success text-white">
+    <h5 class="mb-0">💳 Paiement du voyage</h5>
+  </div>
+  <div class="card-body">
+    <div *ngIf="loading" class="text-center py-4">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div *ngIf="!loading && voyage">
+      <!-- Informations du voyage -->
+      <div class="alert alert-info mb-4">
+        <h6 class="mb-2">📋 Détails du voyage</h6>
+        <p class="mb-1"><strong>Destination :</strong> {{ voyage.ligne?.destination }}</p>
+        <p class="mb-1"><strong>Date :</strong> {{ voyage.dateVoyage | date:'dd/MM/yyyy' }}</p>
+        <p class="mb-1"><strong>Horaire :</strong> {{ voyage.horaire?.horaire_depart }} → {{ voyage.horaire?.horaire_arrive }}</p>
+        <p class="mb-1"><strong>Places restantes :</strong> {{ voyage.nombrePlacesDisponible }}</p>
+        <p class="mb-0"><strong>Prix unitaire :</strong> {{ voyage.prix }} DT</p>
+      </div>
+
+      <!-- Formulaire de paiement -->
+      <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" *ngIf="!paymentResult">
+        <div class="alert alert-danger" *ngIf="paymentError">
+          {{ paymentError }}
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Nom du passager *</label>
+              <input type="text" class="form-control" formControlName="passagerNom"
+                     [class.is-invalid]="f['passagerNom'].invalid && f['passagerNom'].touched">
+              <div class="invalid-feedback">Le nom est requis</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email *</label>
+              <input type="email" class="form-control" formControlName="passagerEmail"
+                     [class.is-invalid]="f['passagerEmail'].invalid && f['passagerEmail'].touched">
+              <div class="invalid-feedback">Email valide requis</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nombre de billets *</label>
+              <input type="number" class="form-control" formControlName="nbBillets" min="1" [max]="maxPlaces"
+                     [class.is-invalid]="f['nbBillets'].invalid && f['nbBillets'].touched">
+              <div class="invalid-feedback">Entre 1 et {{ maxPlaces }} billets</div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Méthode de paiement *</label>
+              <select class="form-select" formControlName="methode"
+                      [class.is-invalid]="f['methode'].invalid && f['methode'].touched">
+                <option value="CB">Carte Bancaire</option>
+                <option value="Stripe">Stripe</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Espèces">Espèces</option>
+              </select>
+            </div>
+
+            <div class="mb-3" *ngIf="paymentForm.get('methode')?.value === 'Espèces'">
+              <label class="form-label">Montant reçu (DT) *</label>
+              <input type="number" step="0.01" class="form-control" formControlName="paymentAmount"
+                     [class.is-invalid]="f['paymentAmount']?.invalid && f['paymentAmount']?.touched">
+              <small class="text-muted">Montant à payer : {{ totalAmount }} DT</small>
+              <div class="invalid-feedback">Montant valide requis</div>
+            </div>
+
+            <div class="alert alert-info" *ngIf="paymentForm.get('methode')?.value === 'PayPal'">
+              <strong>Coordonnées PayPal :</strong><br>
+              Email : {{ paypalContact }}<br>
+              Message : Paiement du ticket pour {{ paymentForm.get('passagerNom')?.value || 'passager' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 text-end">
+          <button type="button" class="btn btn-secondary me-2" routerLink="/voyages/list">
+            Annuler
+          </button>
+          <button type="submit" class="btn btn-success" [disabled]="submitting">
+            <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
+            Payer {{ totalAmount }} DT
+          </button>
+        </div>
+      </form>
+
+      <!-- Résultat du paiement -->
+      <div *ngIf="paymentResult" class="mt-4">
+        <div class="alert alert-success">
+          <h5 class="mb-3">✅ Paiement réussi !</h5>
+          <p><strong>Passager :</strong> {{ paymentResult.passagerNom }}</p>
+          <p><strong>Numéro de ticket :</strong> {{ paymentResult.ticketNumber }}</p>
+          <p><strong>Montant total :</strong> {{ paymentResult.total }} DT</p>
+          <p *ngIf="paymentResult.methode === 'Espèces'"><strong>Montant reçu :</strong> {{ paymentResult.paymentAmount }} DT</p>
+          <p *ngIf="paymentResult.methode === 'Espèces'"><strong>Rendu :</strong> {{ paymentResult.change }} DT</p>
+          <p *ngIf="paymentResult.methode === 'PayPal'"><strong>PayPal :</strong> {{ paymentResult.paypalContact || paypalContact }}</p>
+
+          <div class="mt-3 text-center">
+            <img [src]="qrImageUrl" alt="QR Code ticket" width="200" height="200"
+                 style="border: 1px solid #dee2e6; border-radius: 8px; padding: 8px; background: white;">
+            <div class="mt-1 text-muted" style="font-size:0.75rem">Scanner pour valider le ticket</div>
+          </div>
+        </div>
+
+        <div class="text-end">
+          <button class="btn btn-primary" routerLink="/voyages/list">
+            Retour à la liste
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

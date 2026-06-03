@@ -1,0 +1,88 @@
+<c-card class="mb-4" style="max-width:700px; margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2"
+    style="background: linear-gradient(135deg,#6610f2,#4c0099); color:white">
+    <span style="font-size:1.3rem">🎫</span>
+    <strong class="fs-5 mb-0">Nouveau Ticket</strong>
+  </c-card-header>
+
+  <c-card-body>
+    <form #form="ngForm" (ngSubmit)="save(form)" novalidate>
+
+      <!-- Voyage & Passager -->
+      <div class="p-3 mb-3 rounded" style="background:#f8f5ff; border-left:4px solid #6610f2">
+        <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Voyage &amp; Passager</h6>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">ID Voyage *</label>
+            <input cFormControl type="number" name="voyageId"
+              [(ngModel)]="ticket.voyageId" required min="1"
+              [class.is-invalid]="form.submitted && form.controls['voyageId']?.invalid">
+            <div class="invalid-feedback">ID voyage requis (&gt; 0)</div>
+          </div>
+          <div class="col-md-8">
+            <label class="form-label fw-semibold">Nom du passager *</label>
+            <input cFormControl name="passagerNom"
+              [(ngModel)]="ticket.passagerNom" required placeholder="Prénom Nom"
+              [class.is-invalid]="form.submitted && form.controls['passagerNom']?.invalid">
+            <div class="invalid-feedback">Nom requis</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold">Email passager</label>
+            <input cFormControl type="email" name="passagerEmail"
+              [(ngModel)]="ticket.passagerEmail" placeholder="email@exemple.com">
+          </div>
+        </div>
+      </div>
+
+      <!-- Paiement -->
+      <div class="p-3 mb-4 rounded" style="background:#fff8f0; border-left:4px solid #f9a825">
+        <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Paiement</h6>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Nb billets *</label>
+            <input cFormControl type="number" name="nombreBillets"
+              [(ngModel)]="ticket.nombreBillets" required min="1"
+              [class.is-invalid]="form.submitted && form.controls['nombreBillets']?.invalid">
+            <div class="invalid-feedback">Requis (≥ 1)</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Montant (DT) *</label>
+            <input cFormControl type="number" step="0.01" name="montantTotal"
+              [(ngModel)]="ticket.montantTotal" required min="0"
+              [class.is-invalid]="form.submitted && form.controls['montantTotal']?.invalid">
+            <div class="invalid-feedback">Montant requis (≥ 0)</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Méthode *</label>
+            <select cSelect name="methodePaiement"
+              [(ngModel)]="ticket.methodePaiement" required
+              [class.is-invalid]="form.submitted && form.controls['methodePaiement']?.invalid">
+              <option value="">Choisir...</option>
+              <option value="Espèces">Espèces</option>
+              <option value="Carte">Carte bancaire</option>
+              <option value="Stripe">Stripe</option>
+              <option value="PayPal">PayPal</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Statut</label>
+            <select cSelect name="statut" [(ngModel)]="ticket.statut">
+              <option value="PAYE">Payé</option>
+              <option value="EN_ATTENTE">En attente</option>
+              <option value="ANNULE">Annulé</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button cButton color="secondary" type="button" routerLink="/tickets">Annuler</button>
+        <button cButton color="primary" type="submit" [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ loading ? 'Enregistrement...' : '✅ Enregistrer' }}
+        </button>
+      </div>
+
+    </form>
+  </c-card-body>
+</c-card>

@@ -1,0 +1,66 @@
+@if (loading) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2 text-muted">Chargement...</p>
+  </div>
+} @else if (error) {
+  <div class="alert alert-danger">{{ error }}</div>
+} @else if (ticket) {
+  <c-card class="mb-4" style="max-width:700px; margin:auto">
+    <c-card-header class="d-flex align-items-center gap-2"
+      style="background: linear-gradient(135deg,#6610f2,#4c0099); color:white">
+      <span style="font-size:1.3rem">🎫</span>
+      <strong class="fs-5 mb-0">Ticket {{ ticket.numero }}</strong>
+      <c-badge
+        [color]="ticket.statut === 'PAYE' ? 'success' : ticket.statut === 'ANNULE' ? 'danger' : 'warning'"
+        class="ms-auto">
+        {{ ticket.statut }}
+      </c-badge>
+    </c-card-header>
+
+    <c-card-body>
+      <div class="row g-3">
+
+        <!-- Voyage & Date -->
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f5ff; border-left:4px solid #6610f2">
+            <small class="text-muted text-uppercase fw-semibold">Voyage</small>
+            <div class="fs-5 fw-bold mt-1">#{{ ticket.voyageId }}</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f8f8; border-left:4px solid #9e9e9e">
+            <small class="text-muted text-uppercase fw-semibold">Date de création</small>
+            <div class="mt-1">{{ ticket.dateCreation | date:'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </div>
+
+        <!-- Passager -->
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f5ff; border-left:4px solid #6610f2">
+            <small class="text-muted text-uppercase fw-semibold">Passager</small>
+            <div class="fw-semibold mt-1">{{ ticket.passagerNom }}</div>
+            <small class="text-muted">{{ ticket.passagerEmail || '—' }}</small>
+          </div>
+        </div>
+
+        <!-- Paiement -->
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#fff8f0; border-left:4px solid #f9a825">
+            <small class="text-muted text-uppercase fw-semibold">Paiement</small>
+            <div class="mt-1">
+              <span class="fw-bold fs-5">{{ ticket.montantTotal | number:'1.2-2' }} DT</span>
+            </div>
+            <small class="text-muted">{{ ticket.nombreBillets }} billet(s) · {{ ticket.methodePaiement }}</small>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button cButton color="secondary" variant="outline" routerLink="/tickets">← Retour</button>
+        <button cButton color="warning" variant="outline" [routerLink]="['/tickets/edit', ticket.id]">✏️ Modifier</button>
+      </div>
+    </c-card-body>
+  </c-card>
+}

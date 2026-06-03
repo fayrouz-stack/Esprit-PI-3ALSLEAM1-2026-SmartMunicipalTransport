@@ -1,0 +1,107 @@
+<c-card class="mb-4">
+  <c-card-header class="d-flex justify-content-between align-items-center"
+    style="background: linear-gradient(135deg,#321fdb,#6f42c1); color:white">
+    <div class="d-flex align-items-center gap-2">
+      <span style="font-size:1.3rem">📋</span>
+      <strong class="fs-5 mb-0">Affectations</strong>
+      <c-badge color="light" class="text-dark" shape="rounded-pill">{{ filtered.length }}</c-badge>
+    </div>
+    <div class="d-flex gap-2">
+      <button cButton color="light" size="sm" variant="outline" routerLink="/affectations/planning">
+        📅 Planning
+      </button>
+      <button cButton color="light" size="sm" variant="outline" routerLink="/affectations/add">
+        + Ajouter
+      </button>
+    </div>
+  </c-card-header>
+
+  <c-card-body>
+
+    <!-- Filtres -->
+    <div class="row mb-3 g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label text-muted small fw-semibold">Recherche (chauffeur / véhicule / ligne ID)</label>
+        <input cFormControl type="text" placeholder="Ex: 3"
+          [(ngModel)]="searchTerm" (input)="applyFilters()">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small fw-semibold">Statut</label>
+        <select cSelect [(ngModel)]="filterStatut" (change)="applyFilters()">
+          <option value="">Tous les statuts</option>
+          <option value="PLANIFIEE">Planifiée</option>
+          <option value="EN_COURS">En cours</option>
+          <option value="TERMINEE">Terminée</option>
+          <option value="ANNULEE">Annulée</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button cButton color="secondary" variant="outline" size="sm"
+          (click)="searchTerm=''; filterStatut=''; applyFilters()">↺ Réinitialiser</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead style="background:#ede8ff">
+          <tr>
+            <th style="width:60px">#</th>
+            <th>Chauffeur</th>
+            <th>Véhicule</th>
+            <th>Ligne</th>
+            <th>Période</th>
+            <th>Statut</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (loading) {
+            <tr>
+              <td colspan="7" class="text-center py-4">
+                <div class="spinner-border spinner-border-sm text-primary me-2"></div>Chargement...
+              </td>
+            </tr>
+          } @else {
+            @for (a of filtered; track a.id) {
+              <tr>
+                <td><c-badge color="secondary" shape="rounded-pill">{{ a.id }}</c-badge></td>
+                <td>
+                  <c-badge color="primary" variant="outline" shape="rounded-pill">👤 #{{ a.chauffeurId }}</c-badge>
+                </td>
+                <td>
+                  <c-badge color="success" variant="outline" shape="rounded-pill">🚌 #{{ a.vehiculeId }}</c-badge>
+                </td>
+                <td>
+                  <c-badge color="info" variant="outline" shape="rounded-pill">🛤️ #{{ a.ligneId }}</c-badge>
+                </td>
+                <td>
+                  <div><small class="text-muted">Début :</small> {{ a.dateDebut | date:'dd/MM/yy HH:mm' }}</div>
+                  <div><small class="text-muted">Fin :</small> {{ a.dateFin | date:'dd/MM/yy HH:mm' }}</div>
+                </td>
+                <td><c-badge [color]="statutBadgeColor(a.statut)">{{ a.statut }}</c-badge></td>
+                <td class="text-end">
+                  <div class="d-flex justify-content-end gap-1">
+                    <button cButton color="info" size="sm" variant="outline"
+                      [routerLink]="['/affectations/detail', a.id]" title="Détails">👁</button>
+                    <button cButton color="warning" size="sm" variant="outline"
+                      [routerLink]="['/affectations/edit', a.id]" title="Modifier">✏️</button>
+                    <button cButton color="danger" size="sm" variant="outline"
+                      (click)="deleteAffectation(a.id!)" title="Supprimer">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="text-center py-5 text-muted">
+                  <div style="font-size:2.5rem">📋</div>
+                  <p class="mt-2 mb-0">Aucune affectation trouvée</p>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+  </c-card-body>
+</c-card>

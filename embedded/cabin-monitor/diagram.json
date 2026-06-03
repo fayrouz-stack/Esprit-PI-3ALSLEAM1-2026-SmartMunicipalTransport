@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "author": "Municipal Transport IoT",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-v1",
+      "id": "esp32",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": -80,
+      "left": 210,
+      "attrs": { "temperature": "27", "humidity": "55" }
+    },
+    {
+      "type": "wokwi-gas-sensor",
+      "id": "mq2",
+      "top": -80,
+      "left": 330,
+      "attrs": { "resistance": "10" }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": 160,
+      "left": -100,
+      "attrs": { "pins": "i2c", "i2cAddress": "0x27" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_green",
+      "top": 80,
+      "left": 220,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_red",
+      "top": 80,
+      "left": 260,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "buzzer1",
+      "top": 80,
+      "left": 300,
+      "attrs": { "volume": "0.5" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 110,
+      "left": 220,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 110,
+      "left": 260,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    ["esp32:GND.1", "lcd1:GND",    "black",  []],
+    ["esp32:3V3",   "lcd1:VCC",    "red",    []],
+    ["esp32:D21",   "lcd1:SDA",    "blue",   []],
+    ["esp32:D22",   "lcd1:SCL",    "yellow", []],
+
+    ["esp32:GND.1", "dht1:GND",   "black",  []],
+    ["esp32:3V3",   "dht1:VCC",   "red",    []],
+    ["esp32:D4",    "dht1:SDA",   "green",  []],
+
+    ["esp32:GND.1", "mq2:GND",    "black",  []],
+    ["esp32:3V3",   "mq2:VCC",    "red",    []],
+    ["esp32:D34",   "mq2:AOUT",   "orange", []],
+
+    ["esp32:D5",    "r1:1",       "green",  []],
+    ["r1:2",        "led_green:A","green",  []],
+    ["led_green:K", "esp32:GND.1","black",  []],
+
+    ["esp32:D2",    "r2:1",       "red",    []],
+    ["r2:2",        "led_red:A",  "red",    []],
+    ["led_red:K",   "esp32:GND.1","black",  []],
+
+    ["esp32:D18",   "buzzer1:1",  "purple", []],
+    ["buzzer1:2",   "esp32:GND.1","black",  []]
+  ],
+  "dependencies": {}
+}

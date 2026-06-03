@@ -1,0 +1,56 @@
+<c-card class="mb-4" style="max-width:600px; margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2" style="background: linear-gradient(135deg,#2eb85c,#1a7a3f); color:white">
+    <span style="font-size:1.3rem">📍</span>
+    <strong class="fs-5 mb-0">Ajouter une station</strong>
+  </c-card-header>
+
+  <c-card-body>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="nom">Nom de la station *</label>
+        <input
+          cFormControl
+          id="nom"
+          type="text"
+          formControlName="nom"
+          placeholder="Ex: Gare de Tunis"
+          [class.is-invalid]="form.get('nom')?.invalid && form.get('nom')?.touched">
+        <div class="invalid-feedback">Le nom est requis</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="adresse">Adresse *</label>
+        <input
+          cFormControl
+          id="adresse"
+          type="text"
+          formControlName="adresse"
+          placeholder="Ex: Avenue Habib Bourguiba"
+          [class.is-invalid]="form.get('adresse')?.invalid && form.get('adresse')?.touched">
+        <div class="invalid-feedback">L'adresse est requise</div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold" for="ville">Ville *</label>
+        <input
+          cFormControl
+          id="ville"
+          type="text"
+          formControlName="ville"
+          placeholder="Ex: Tunis"
+          [class.is-invalid]="form.get('ville')?.invalid && form.get('ville')?.touched">
+        <div class="invalid-feedback">La ville est requise</div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button cButton color="secondary" type="button" routerLink="/stations">Annuler</button>
+        <button cButton color="success" type="submit" [disabled]="submitting || form.invalid">
+          <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
+          {{ submitting ? 'Enregistrement...' : '✅ Enregistrer' }}
+        </button>
+      </div>
+
+    </form>
+  </c-card-body>
+</c-card>

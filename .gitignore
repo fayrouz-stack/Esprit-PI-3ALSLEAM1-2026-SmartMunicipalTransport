@@ -1,0 +1,19 @@
+﻿# Docker
+volumes/
+*.log
+
+# Backend
+*/target/
+*.class
+*.jar
+*.war
+
+# Frontend
+*/node_modules/
+*/dist/
+*/tmp/
+
+# IDE
+.idea/
+.vscode/
+*.swp

@@ -39,10 +39,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+<<<<<<< HEAD
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>

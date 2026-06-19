@@ -17,10 +17,13 @@ public class HoraireService {
         return repository.findAll();
     }
 
+<<<<<<< HEAD
     public List<Horaire> findByLigneId(Integer ligneId) {
         return repository.findByLigneId(ligneId);
     }
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     public Horaire findById(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Horaire non trouvé"));

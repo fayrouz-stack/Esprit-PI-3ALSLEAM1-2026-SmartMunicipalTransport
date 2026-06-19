@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+=======
+import { Component, OnInit, inject } from '@angular/core';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import { HttpClient } from '@angular/common/http';
 import { AffectationService } from '../affectation.service';
 import { Affectation } from '../affectation.model';
@@ -21,7 +25,10 @@ export class AffectationPlanningComponent implements OnInit {
   private service = inject(AffectationService);
   private http = inject(HttpClient);
   private apiBase = environment.apiUrl;
+<<<<<<< HEAD
   private cdr = inject(ChangeDetectorRef);
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
   loading = false;
   weekStart: Date = this.startOfWeek(new Date());
@@ -60,9 +67,14 @@ export class AffectationPlanningComponent implements OnInit {
       next: (data) => {
         this.groups = this.buildGroups(data);
         this.loading = false;
+<<<<<<< HEAD
         this.cdr.detectChanges();
       },
       error: (err) => { console.error(err); this.loading = false; this.cdr.detectChanges(); }
+=======
+      },
+      error: (err) => { console.error(err); this.loading = false; }
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     });
   }
 

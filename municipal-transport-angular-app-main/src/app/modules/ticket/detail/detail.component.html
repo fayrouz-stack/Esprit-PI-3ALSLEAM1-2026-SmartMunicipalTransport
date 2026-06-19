@@ -11,6 +11,7 @@
       style="background: linear-gradient(135deg,#6610f2,#4c0099); color:white">
       <span style="font-size:1.3rem">🎫</span>
       <strong class="fs-5 mb-0">Ticket {{ ticket.numero }}</strong>
+<<<<<<< HEAD
       <c-badge [color]="statutColor()" class="ms-auto">{{ ticket.statut }}</c-badge>
     </c-card-header>
 
@@ -37,6 +38,16 @@
         </div>
       }
 
+=======
+      <c-badge
+        [color]="ticket.statut === 'PAYE' ? 'success' : ticket.statut === 'ANNULE' ? 'danger' : 'warning'"
+        class="ms-auto">
+        {{ ticket.statut }}
+      </c-badge>
+    </c-card-header>
+
+    <c-card-body>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
       <div class="row g-3">
 
         <!-- Voyage & Date -->
@@ -73,6 +84,7 @@
           </div>
         </div>
 
+<<<<<<< HEAD
         <!-- Statut UTILISE -->
         @if (ticket.statut === 'UTILISE') {
           <div class="col-12">
@@ -83,11 +95,14 @@
           </div>
         }
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
       </div>
 
       <div class="d-flex justify-content-end gap-2 mt-4">
         <button cButton color="secondary" variant="outline" routerLink="/tickets">← Retour</button>
         <button cButton color="warning" variant="outline" [routerLink]="['/tickets/edit', ticket.id]">✏️ Modifier</button>
+<<<<<<< HEAD
 
         <!-- Bouton Valider : visible uniquement si PAYE -->
         @if (ticket.statut === 'PAYE') {
@@ -101,6 +116,9 @@
         }
       </div>
 
+=======
+      </div>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     </c-card-body>
   </c-card>
 }

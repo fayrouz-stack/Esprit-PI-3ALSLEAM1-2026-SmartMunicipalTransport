@@ -1,7 +1,10 @@
 package municipal_transport_backend.alternate.smartbus.service;
 
 import municipal_transport_backend.alternate.smartbus.entity.Affectation;
+<<<<<<< HEAD
 import municipal_transport_backend.alternate.smartbus.entity.Chauffeur;
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import municipal_transport_backend.alternate.smartbus.entity.Vehicule;
 import municipal_transport_backend.alternate.smartbus.repository.AffectationRepository;
 import municipal_transport_backend.alternate.smartbus.repository.ChauffeurRepository;
@@ -91,6 +94,7 @@ public class AffectationService {
                           || "PLANIFIEE".equalsIgnoreCase(a.getStatut()))
                 .count();
     }
+<<<<<<< HEAD
 
     /**
      * Auto-affectation : trouve le premier chauffeur et le premier véhicule
@@ -135,4 +139,6 @@ public class AffectationService {
         a.setRemarque("Affectation automatique");
         return repo.save(a);
     }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

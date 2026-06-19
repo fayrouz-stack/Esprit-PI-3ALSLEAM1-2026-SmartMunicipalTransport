@@ -9,6 +9,7 @@ export interface Affectation {
   remarque?: string;
   dateCreation?: string;
 }
+<<<<<<< HEAD
 
 /** Payload envoyé à POST /api/affectations/auto */
 export interface AutoAssignRequest {
@@ -16,3 +17,5 @@ export interface AutoAssignRequest {
   dateDebut: string; // ISO datetime
   dateFin: string;   // ISO datetime
 }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <c-card class="mb-4">
   <c-card-header class="d-flex align-items-center justify-content-between"
                  style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white;padding:1rem 1.25rem">
@@ -161,3 +162,121 @@
 
   </c-card-body>
 </c-card>
+=======
+<c-card class="mb-4">
+  <c-card-header class="d-flex align-items-center justify-content-between"
+                 style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white;padding:1rem 1.25rem">
+    <div class="d-flex align-items-center gap-2">
+      <span style="font-size:1.4rem">🚌</span>
+      <strong class="fs-5 mb-0">Gestion des véhicules</strong>
+      <c-badge color="light" class="text-dark ms-1">{{ totalItems }}</c-badge>
+    </div>
+    <button cButton color="light" size="sm" routerLink="/vehicules/add"
+            style="color:#321fdb;font-weight:600">+ Ajouter</button>
+  </c-card-header>
+  <c-card-body>
+    <!-- Filtres -->
+    <div class="row mb-3 g-2 align-items-end">
+      <div class="col-md-5">
+        <div class="input-group">
+          <span class="input-group-text">🔍</span>
+          <input cFormControl type="text" placeholder="Rechercher..." [(ngModel)]="searchTerm" (input)="onSearch()">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" [(ngModel)]="etatFilter" (change)="onEtatChange()">
+          <option value="">Tous les états</option>
+          <option value="disponible">Disponible</option>
+          <option value="en service">En service</option>
+          <option value="en panne">En panne</option>
+          <option value="bon état">Bon état</option>
+          <option value="neuf">Neuf</option>
+          <option value="usé">Usé</option>
+          <option value="en réparation">En réparation</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button cButton color="secondary" variant="outline" class="w-100" (click)="resetFilters()">Réinitialiser</button>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Véhicule</th>
+            <th>Carburant</th>
+            <th>Kilométrage</th>
+            <th>Assurance</th>
+            <th>État</th>
+            <th>Dispo</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (loading) {
+            <tr>
+              <td colspan="7" class="text-center py-4">
+                <div class="spinner-border text-primary spinner-border-sm me-2"></div>
+                Chargement...
+              </td>
+            </tr>
+          } @else {
+            @for (vehicule of paginatedVehicules; track vehicule.id) {
+              <tr>
+                <td>
+                  <div class="fw-semibold">{{ vehicule.matriculeFourni }}</div>
+                  <div class="small text-muted">{{ vehicule.marque }} {{ vehicule.modele }} · {{ vehicule.typeVehicule }}</div>
+                </td>
+                <td class="small">⛽ {{ vehicule.carburant }}</td>
+                <td class="small">{{ vehicule.kilometrage | number }} km</td>
+                <td>
+                  <span class="badge" [ngClass]="assuranceClass(vehicule.dateFinAssurance)">
+                    {{ assuranceLabel(vehicule.dateFinAssurance) }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="getEtatClass(vehicule.etat)">{{ vehicule.etat }}</span>
+                </td>
+                <td>
+                  <c-badge [color]="vehicule.vehiculeDispo ? 'success' : 'danger'">
+                    {{ vehicule.vehiculeDispo ? '✅' : '🚫' }}
+                  </c-badge>
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-info me-1" [routerLink]="['/vehicules/detail', vehicule.id]" title="Détails">👁</button>
+                  <button class="btn btn-sm btn-outline-warning me-1" [routerLink]="['/vehicules/edit', vehicule.id]" title="Modifier">✏️</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteVehicule(vehicule.id!)" title="Supprimer">🗑</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="text-center py-5">
+                  <div style="font-size:2.5rem">🚌</div>
+                  <div class="text-muted mt-2">Aucun véhicule trouvé</div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalItems > itemsPerPage) {
+      <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+        <small class="text-muted">
+          {{ (currentPage-1)*itemsPerPage+1 }}–{{ currentPage*itemsPerPage > totalItems ? totalItems : currentPage*itemsPerPage }}
+          sur {{ totalItems }} véhicules
+        </small>
+        <div class="d-flex gap-1">
+          <button class="btn btn-sm btn-outline-secondary" (click)="previousPage()" [disabled]="currentPage === 1">‹</button>
+          <span class="btn btn-sm btn-primary disabled" style="cursor:default;pointer-events:none">{{ currentPage }} / {{ totalPages }}</span>
+          <button class="btn btn-sm btn-outline-secondary" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
+        </div>
+      </div>
+    }
+  </c-card-body>
+</c-card>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced

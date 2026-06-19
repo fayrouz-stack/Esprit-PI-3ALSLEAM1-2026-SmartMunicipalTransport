@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package municipal_transport_backend.alternate.smartbus.entity;
 
 import jakarta.persistence.*;
@@ -25,3 +26,22 @@ public class Ligne {
     )
     private List<Station> stations = new ArrayList<>();
 }
+=======
+package municipal_transport_backend.alternate.smartbus.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Table(name = "ligne")
+@Data
+public class Ligne {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String numero;      // رقم الخط (مثلاً "101")
+    private String destination; // الوجهة (مثلاً "Tunis - Sousse")
+}
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced

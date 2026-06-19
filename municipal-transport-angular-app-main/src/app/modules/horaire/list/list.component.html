@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <c-card class="mb-4">
   <c-card-header class="d-flex justify-content-between align-items-center"
     style="background:linear-gradient(135deg,#321fdb,#6f42c1);color:white">
@@ -119,3 +120,69 @@
   </c-card-body>
 </c-card>
 
+=======
+<c-card class="mb-4">
+  <c-card-header class="d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+      <span style="font-size:1.4rem">🕐</span>
+      <strong class="fs-5">Gestion des Horaires</strong>
+      <c-badge color="primary" shape="rounded-pill">{{ horaires.length }}</c-badge>
+    </div>
+    <button cButton color="primary" size="sm" routerLink="/horaires/add">
+      + Ajouter un horaire
+    </button>
+  </c-card-header>
+
+  <c-card-body>
+    @if (loading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2 text-muted">Chargement des horaires...</p>
+      </div>
+    } @else if (horaires.length === 0) {
+      <div class="text-center py-5">
+        <div style="font-size:3rem">🕐</div>
+        <h6 class="mt-2 text-muted">Aucun horaire enregistré</h6>
+        <button cButton color="primary" size="sm" routerLink="/horaires/add">Ajouter le premier horaire</button>
+      </div>
+    } @else {
+      <table cTable hover striped responsive>
+        <thead cTableHead color="dark">
+          <tr>
+            <th scope="col" style="width:70px">#</th>
+            <th scope="col">📅 Date</th>
+            <th scope="col">🟢 Départ</th>
+            <th scope="col">🔴 Arrivée</th>
+            <th scope="col">⏱️ Retard</th>
+            <th scope="col" class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody cTableBody>
+          @for (h of horaires; track h.id) {
+            <tr>
+              <td><c-badge color="secondary" shape="rounded-pill">{{ h.id }}</c-badge></td>
+              <td class="fw-semibold">{{ h.date_voyage | date:'dd/MM/yyyy' }}</td>
+              <td class="text-success fw-semibold">{{ formatTime(h.horaire_depart) }}</td>
+              <td class="text-danger fw-semibold">{{ formatTime(h.horaire_arrive) }}</td>
+              <td>
+                <c-badge [color]="(h.retard_estime ?? 0) > 0 ? 'danger' : 'success'" shape="rounded-pill">
+                  {{ (h.retard_estime ?? 0) > 0 ? (h.retard_estime + ' min') : 'À l\'heure' }}
+                </c-badge>
+              </td>
+              <td class="text-end">
+                <div class="d-flex justify-content-end gap-1">
+                  <button cButton color="info" size="sm" variant="outline" [routerLink]="['/horaires/detail', h.id]" title="Détails">👁️</button>
+                  <button cButton color="warning" size="sm" variant="outline" [routerLink]="['/horaires/edit', h.id]" title="Modifier">✏️</button>
+                  <button cButton color="danger" size="sm" variant="outline" (click)="deleteHoraire(h.id!)" title="Supprimer">🗑️</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </c-card-body>
+</c-card>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced

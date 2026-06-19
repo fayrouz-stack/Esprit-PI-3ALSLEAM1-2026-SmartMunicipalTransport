@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import { Component, inject } from '@angular/core';
 import { NgIf } from '@angular/common';
+=======
+import { Component } from '@angular/core';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgScrollbar } from 'ngx-scrollbar';
 
@@ -14,10 +18,15 @@ import {
   SidebarToggleDirective,
   SidebarTogglerDirective
 } from '@coreui/angular';
+<<<<<<< HEAD
 import { IconDirective } from '@coreui/icons-angular';
 
 import { DefaultFooterComponent, DefaultHeaderComponent } from './';
 import { ViolenceDetectionService } from '../../services/violence-detection.service';
+=======
+
+import { DefaultFooterComponent, DefaultHeaderComponent } from './';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import { navItems } from './_nav';
 
 function isOverflown(element: HTMLElement) {
@@ -42,15 +51,20 @@ function isOverflown(element: HTMLElement) {
     DefaultFooterComponent,
     RouterOutlet,
     SidebarBrandComponent,
+<<<<<<< HEAD
     SidebarNavComponent,
     IconDirective,
     NgIf
+=======
+    SidebarNavComponent
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   ],
 
   // ❌ REMOVED: imports array (this was causing your bug)
 })
 export class DefaultLayoutComponent {
   public navItems = [...navItems];
+<<<<<<< HEAD
   public violenceDetected = false;
   public readonly violenceDetectionService = inject(ViolenceDetectionService);
 
@@ -59,4 +73,6 @@ export class DefaultLayoutComponent {
       this.violenceDetected = value;
     });
   }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

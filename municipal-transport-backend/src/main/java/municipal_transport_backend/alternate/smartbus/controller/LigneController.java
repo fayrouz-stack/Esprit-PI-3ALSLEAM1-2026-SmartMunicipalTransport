@@ -1,9 +1,13 @@
 package municipal_transport_backend.alternate.smartbus.controller;
 
+<<<<<<< HEAD
 import municipal_transport_backend.alternate.smartbus.entity.Horaire;
 import municipal_transport_backend.alternate.smartbus.entity.Ligne;
 import municipal_transport_backend.alternate.smartbus.entity.Station;
 import municipal_transport_backend.alternate.smartbus.service.HoraireService;
+=======
+import municipal_transport_backend.alternate.smartbus.entity.Ligne;
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import municipal_transport_backend.alternate.smartbus.service.LigneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +21,12 @@ public class LigneController {
     @Autowired
     private LigneService ligneService;
 
+<<<<<<< HEAD
     @Autowired
     private HoraireService horaireService;
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     @GetMapping
     public List<Ligne> getAll() {
         return ligneService.findAll();
@@ -35,6 +42,7 @@ public class LigneController {
         return ligneService.findById(id);
     }
 
+<<<<<<< HEAD
     @GetMapping("/{id}/stations")
     public List<Station> getStations(@PathVariable Integer id) {
         return ligneService.getStations(id);
@@ -55,6 +63,8 @@ public class LigneController {
         return horaireService.findByLigneId(id);
     }
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     @PostMapping
     public Ligne create(@RequestBody Ligne ligne) {
         return ligneService.save(ligne);

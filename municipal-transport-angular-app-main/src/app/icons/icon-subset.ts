@@ -29,7 +29,10 @@ import {
   cilBold,
   cilBookmark,
   cilBusAlt,
+<<<<<<< HEAD
   cilCamera,
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   cilCalculator,
   cilCalendar,
   cilChart,
@@ -135,7 +138,10 @@ export const iconSubset = {
   cilBold,
   cilBookmark,
   cilBusAlt,
+<<<<<<< HEAD
   cilCamera,
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   cilCalculator,
   cilCalendar,
   cilChart,
@@ -239,8 +245,11 @@ export enum IconSubset {
   cilBell = 'cilBell',
   cilBold = 'cilBold',
   cilBookmark = 'cilBookmark',
+<<<<<<< HEAD
   cilBusAlt = 'cilBusAlt',
   cilCamera = 'cilCamera',
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   cilCalculator = 'cilCalculator',
   cilCalendar = 'cilCalendar',
   cilChart = 'cilChart',

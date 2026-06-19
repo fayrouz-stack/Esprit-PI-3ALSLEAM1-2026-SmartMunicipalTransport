@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Component, AfterViewInit, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild, ElementRef, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
@@ -185,4 +186,163 @@ export class VehiculeMapComponent implements AfterViewInit, OnChanges, OnDestroy
     const icons: Record<number, string> = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'🌨️',80:'🌦️',81:'🌦️',82:'🌦️',95:'⛈️'};
     return icons[code] || '☁️';
   }
+=======
+import { Component, AfterViewInit, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild, ElementRef, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import * as L from 'leaflet';
+import { environment } from '../../../environnement/environment';
+import { VehiculeService } from '../vehicule.service';
+
+@Component({
+  selector: 'app-vehicule-map',
+  standalone: false,
+  templateUrl: './vehicule-map.component.html',
+  styleUrls: ['./vehicule-map.component.scss']
+})
+export class VehiculeMapComponent implements AfterViewInit, OnChanges, OnDestroy {
+  @Input() vehicle: any;
+  @Input() location: string = '';
+
+  @ViewChild('mapContainer') mapContainer!: ElementRef;
+  private map: any;
+  private marker: any;
+  private http = inject(HttpClient);
+  private vehiculeService = inject(VehiculeService);
+  private refreshInterval: any;
+
+  // Rafraîchit la position GPS toutes les 5 secondes si le véhicule a des coordonnées
+  private startAutoRefresh(): void {
+    this.stopAutoRefresh();
+    if (!this.vehicle?.id) return;
+    this.refreshInterval = setInterval(() => {
+      this.vehiculeService.getById(this.vehicle.id).subscribe({
+        next: (v) => {
+          if (v.latitude && v.longitude &&
+              (v.latitude !== this.vehicle.latitude || v.longitude !== this.vehicle.longitude)) {
+            this.vehicle = v;
+            this.showAtCoords(v.latitude!, v.longitude!);
+          }
+        },
+        error: () => {}
+      });
+    }, 5000);
+  }
+
+  private stopAutoRefresh(): void {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+      this.refreshInterval = null;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.stopAutoRefresh();
+    if (this.map) {
+      this.map.remove();
+      this.map = null;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.initMap();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!this.map) return;
+    if (changes['vehicle'] && this.vehicle?.latitude && this.vehicle?.longitude) {
+      // Coordonnées GPS directes
+      this.showAtCoords(this.vehicle.latitude, this.vehicle.longitude);
+    } else if (changes['location'] && this.location) {
+      this.searchAndShowLocation();
+    }
+  }
+
+  private initMap(): void {
+    if (this.map) return; // déjà initialisé
+    this.map = L.map(this.mapContainer.nativeElement).setView([36.8065, 10.1815], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    // Si le véhicule a des coords GPS, les utiliser directement au démarrage
+    if (this.vehicle?.latitude && this.vehicle?.longitude) {
+      this.showAtCoords(this.vehicle.latitude, this.vehicle.longitude);
+    } else if (this.location) {
+      this.searchAndShowLocation();
+    }
+
+    // Démarrer le rafraîchissement automatique de la position GPS
+    this.startAutoRefresh();
+  }
+
+  private showAtCoords(lat: number, lon: number): void {
+    this.map.setView([lat, lon], 14);
+    if (this.marker) this.map.removeLayer(this.marker);
+    const customIcon = L.divIcon({
+      html: '<div style="background: linear-gradient(135deg, #2eb85c, #1a7a3f); width: 44px; height: 44px; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-size: 22px;">📍</div>',
+      iconSize: [44, 44],
+      popupAnchor: [0, -22]
+    });
+    this.marker = L.marker([lat, lon], { icon: customIcon }).addTo(this.map);
+    this.loadWeatherAndTraffic(lat, lon);
+  }
+
+  private searchAndShowLocation(): void {
+    const query = encodeURIComponent(this.location + ', Tunisie');
+    this.http.get(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1&countrycodes=tn`)
+      .subscribe((data: any) => {
+        if (data && data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+          this.map.setView([lat, lon], 13);
+          if (this.marker) this.map.removeLayer(this.marker);
+          const customIcon = L.divIcon({
+            html: '<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: 44px; height: 44px; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-size: 22px;">🚌</div>',
+            iconSize: [44, 44],
+            popupAnchor: [0, -22]
+          });
+          this.marker = L.marker([lat, lon], { icon: customIcon }).addTo(this.map);
+          this.loadWeatherAndTraffic(lat, lon);
+        }
+      });
+  }
+
+  private loadWeatherAndTraffic(lat: number, lon: number): void {
+    this.http.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`)
+      .subscribe((weather: any) => {
+        if (weather.current_weather) {
+          const temp = weather.current_weather.temperature;
+          const wind = weather.current_weather.windspeed;
+          const code = weather.current_weather.weathercode;
+          const condition = this.getWeatherIcon(code);
+          this.http.get(`${environment.apiUrl}/vehicules/traffic?lat=${lat}&lon=${lon}`)
+            .subscribe((traffic: any) => {
+              this.marker.bindPopup(this.buildPopupHtml(condition, temp, wind, traffic)).openPopup();
+            });
+        }
+      });
+  }
+
+  private buildPopupHtml(condition: string, temp: number, wind: number, traffic: any): string {
+    return `
+      <div style="font-family: Arial; min-width: 280px;">
+        <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px; border-radius: 10px 10px 0 0;">
+          <strong>${this.vehicle?.marque || 'Véhicule'}</strong><br>
+          ${this.vehicle?.matriculeFourni || ''}
+        </div>
+        <div style="padding: 12px;">
+          <div><span style="font-size:24px;">📍</span> ${this.location}</div>
+          <div><span style="font-size:24px;">🌡️</span> ${condition} ${temp}°C, Vent: ${wind} km/h</div>
+          <div><span style="font-size:24px;">🚦</span> ${traffic?.description || 'Trafic inconnu'}</div>
+          <div style="margin-top:10px; font-size:12px; color:gray;">🚌 ${this.vehicle?.kilometrage || 0} km</div>
+        </div>
+      </div>
+    `;
+  }
+
+  private getWeatherIcon(code: number): string {
+    const icons: Record<number, string> = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'🌨️',80:'🌦️',81:'🌦️',82:'🌦️',95:'⛈️'};
+    return icons[code] || '☁️';
+  }
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

@@ -3,7 +3,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environnement/environment';
+<<<<<<< HEAD
 import { Affectation, AutoAssignRequest } from './affectation.model';
+=======
+import { Affectation } from './affectation.model';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
 @Injectable({ providedIn: 'root' })
 export class AffectationService {
@@ -41,6 +45,7 @@ export class AffectationService {
       .set('fin', fin);
     return this.http.get<Affectation[]>(`${this.apiUrl}/planning`, { params });
   }
+<<<<<<< HEAD
 
   /**
    * Lance l'auto-affectation côté backend :
@@ -51,4 +56,6 @@ export class AffectationService {
       .post<Affectation>(`${this.apiUrl}/auto`, req)
       .pipe(tap(() => this.cache = null));
   }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

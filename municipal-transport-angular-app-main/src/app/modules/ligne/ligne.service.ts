@@ -4,7 +4,10 @@ import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environnement/environment';
 import { Ligne } from './ligne.model';
+<<<<<<< HEAD
 import { Station } from '../station/station.model';
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
 @Injectable({ providedIn: 'root' })
 export class LigneService {
@@ -24,6 +27,7 @@ export class LigneService {
     return this.http.get<Ligne>(`${this.apiUrl}/${id}`);
   }
 
+<<<<<<< HEAD
   addStation(ligneId: number, stationId: number): Observable<Ligne> {
     return this.http.post<Ligne>(`${this.apiUrl}/${ligneId}/stations/${stationId}`, {}).pipe(tap(() => this.cache = null));
   }
@@ -32,6 +36,8 @@ export class LigneService {
     return this.http.delete<Ligne>(`${this.apiUrl}/${ligneId}/stations/${stationId}`).pipe(tap(() => this.cache = null));
   }
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   create(ligne: Ligne): Observable<Ligne> {
     return this.http.post<Ligne>(this.apiUrl, ligne).pipe(tap(() => this.cache = null));
   }

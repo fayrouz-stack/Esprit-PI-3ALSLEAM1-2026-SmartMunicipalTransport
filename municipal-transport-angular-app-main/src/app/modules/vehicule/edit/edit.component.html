@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <c-card class="mb-4">
   <c-card-header class="d-flex align-items-center gap-2" style="background:linear-gradient(135deg,#f9a825,#e65100);color:white">
     <span style="font-size:1.3rem">✏️</span>
@@ -122,4 +123,130 @@
       </div>
     </form>
   </c-card-body>
+=======
+<c-card class="mb-4">
+  <c-card-header class="d-flex align-items-center gap-2" style="background:linear-gradient(135deg,#f9a825,#e65100);color:white">
+    <span style="font-size:1.3rem">✏️</span>
+    <strong class="fs-5 mb-0">Modifier le véhicule</strong>
+  </c-card-header>
+  <c-card-body>
+    <form [formGroup]="vehiculeForm" (ngSubmit)="onSubmit()">
+
+      <div class="row g-3">
+        <!-- Colonne gauche -->
+        <div class="col-md-6">
+          <div class="p-3 rounded mb-3" style="background:#f8f9fa;border-left:4px solid #321fdb">
+            <h6 class="fw-semibold mb-3">🚌 Informations générales</h6>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Matricule *</label>
+              <input cFormControl type="text" formControlName="matriculeFourni"
+                     [class.is-invalid]="f['matriculeFourni']?.invalid && f['matriculeFourni']?.touched">
+              <div class="invalid-feedback">Le matricule est requis</div>
+            </div>
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="form-label fw-semibold">Marque *</label>
+                <input cFormControl type="text" formControlName="marque">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold">Modèle</label>
+                <input cFormControl type="text" formControlName="modele">
+              </div>
+            </div>
+            <div class="row g-2 mt-1">
+              <div class="col-6">
+                <label class="form-label fw-semibold">Type *</label>
+                <select class="form-select" formControlName="typeVehicule">
+                  <option value="Voiture">Voiture</option>
+                  <option value="Bus">Bus</option>
+                  <option value="Minibus">Minibus</option>
+                  <option value="Camion">Camion</option>
+                  <option value="Utilitaire">Utilitaire</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold">Carburant *</label>
+                <select class="form-select" formControlName="carburant">
+                  <option value="Essence">Essence</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Électrique">Électrique</option>
+                  <option value="Hybride">Hybride</option>
+                  <option value="GPL">GPL</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-2 mt-1">
+              <div class="col-6">
+                <label class="form-label fw-semibold">État</label>
+                <select class="form-select" formControlName="etat">
+                  <option value="disponible">Disponible</option>
+                  <option value="en service">En service</option>
+                  <option value="en panne">En panne</option>
+                  <option value="bon état">Bon état</option>
+                  <option value="neuf">Neuf</option>
+                  <option value="usé">Usé</option>
+                  <option value="en réparation">En réparation</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold">Kilométrage</label>
+                <input cFormControl type="number" formControlName="kilometrage">
+              </div>
+            </div>
+            <div class="mt-2">
+              <label class="form-label fw-semibold">Localisation</label>
+              <input cFormControl type="text" formControlName="localisation" placeholder="Ville, dépôt...">
+            </div>
+            <div class="row g-2 mt-1">
+              <div class="col-6">
+                <label class="form-label fw-semibold">📍 Latitude GPS</label>
+                <input cFormControl type="number" step="0.000001" formControlName="latitude" placeholder="ex: 36.8065">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold">📍 Longitude GPS</label>
+                <input cFormControl type="number" step="0.000001" formControlName="longitude" placeholder="ex: 10.1815">
+              </div>
+            </div>
+            <div class="form-check mt-2">
+              <input type="checkbox" class="form-check-input" formControlName="vehiculeDispo" id="dispo">
+              <label class="form-check-label" for="dispo">Véhicule disponible</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne droite -->
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #e55353">
+            <h6 class="fw-semibold mb-3">📅 Dates administratives</h6>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Fin d'assurance</label>
+              <input cFormControl type="date" formControlName="dateFinAssurance">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Prochain contrôle technique</label>
+              <input cFormControl type="date" formControlName="dateProchainCt">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">1ère mise en circulation</label>
+              <input cFormControl type="date" formControlName="datePremiereMiseCirculation">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Validité exploitation</label>
+              <input cFormControl type="date" formControlName="dateValiditeExploitation">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button cButton color="secondary" type="button" routerLink="/vehicules">Annuler</button>
+        <button cButton color="warning" type="submit" [disabled]="submitting">
+          <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
+          {{ submitting ? 'Enregistrement...' : '💾 Enregistrer' }}
+        </button>
+      </div>
+    </form>
+  </c-card-body>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 </c-card>

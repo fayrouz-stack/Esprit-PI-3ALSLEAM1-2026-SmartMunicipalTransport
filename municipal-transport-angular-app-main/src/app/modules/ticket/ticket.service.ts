@@ -2,7 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+<<<<<<< HEAD
 import { Ticket, TicketStats, TicketValidateResult } from './ticket.model';
+=======
+import { Ticket, TicketStats } from './ticket.model';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import { environment } from '../../environnement/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -38,6 +42,7 @@ export class TicketService {
   getStats(): Observable<TicketStats> {
     return this.http.get<TicketStats>(`${this.apiUrl}/stats`);
   }
+<<<<<<< HEAD
 
   /**
    * Appelle POST /api/tickets/validate
@@ -49,4 +54,6 @@ export class TicketService {
       .post<TicketValidateResult>(`${this.apiUrl}/validate`, { ticketId })
       .pipe(tap(() => this.cache = null));
   }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

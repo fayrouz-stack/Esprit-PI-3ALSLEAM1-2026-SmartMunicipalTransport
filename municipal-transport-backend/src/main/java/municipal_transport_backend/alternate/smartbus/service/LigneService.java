@@ -1,9 +1,13 @@
 package municipal_transport_backend.alternate.smartbus.service;
 
 import municipal_transport_backend.alternate.smartbus.entity.Ligne;
+<<<<<<< HEAD
 import municipal_transport_backend.alternate.smartbus.entity.Station;
 import municipal_transport_backend.alternate.smartbus.repository.LigneRepository;
 import municipal_transport_backend.alternate.smartbus.repository.StationRepository;
+=======
+import municipal_transport_backend.alternate.smartbus.repository.LigneRepository;
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +19,12 @@ public class LigneService {
     @Autowired
     private LigneRepository repository;
 
+<<<<<<< HEAD
     @Autowired
     private StationRepository stationRepository;
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     public List<Ligne> findAll() {
         return repository.findAll();
     }
@@ -39,6 +46,7 @@ public class LigneService {
     public void delete(Integer id) {
         repository.deleteById(id);
     }
+<<<<<<< HEAD
 
     public List<Station> getStations(Integer ligneId) {
         return findById(ligneId).getStations();
@@ -60,4 +68,6 @@ public class LigneService {
         ligne.getStations().removeIf(s -> s.getId().equals(stationId));
         return repository.save(ligne);
     }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

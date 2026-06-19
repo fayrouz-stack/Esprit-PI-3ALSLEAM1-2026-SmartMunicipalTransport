@@ -67,6 +67,7 @@ public class AffectationController {
                 "affectationsActives", service.countActives()
         );
     }
+<<<<<<< HEAD
 
     /**
      * Auto-affectation : sélectionne automatiquement le premier chauffeur
@@ -90,4 +91,6 @@ public class AffectationController {
             return ResponseEntity.badRequest().body(Map.of("error", "Requête invalide : " + e.getMessage()));
         }
     }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

@@ -27,7 +27,10 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: "0000"
       GROQ_API_KEY: "${GROQ_API_KEY:-}"
+<<<<<<< HEAD
       SPRING_AUTOCONFIGURE_EXCLUDE: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     depends_on:
       postgres:
         condition: service_healthy
@@ -44,4 +47,8 @@ services:
       - backend
 
 volumes:
+<<<<<<< HEAD
   pgdata:
+=======
+  pgdata:
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced

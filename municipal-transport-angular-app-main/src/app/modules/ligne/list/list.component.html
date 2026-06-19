@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <c-card class="mb-4">
   <c-card-header class="d-flex justify-content-between align-items-center"
     style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white">
@@ -92,3 +93,61 @@
 
   </c-card-body>
 </c-card>
+=======
+<c-card class="mb-4">
+  <c-card-header class="d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+      <span style="font-size:1.4rem">🛤️</span>
+      <strong class="fs-5">Gestion des Lignes</strong>
+      <c-badge color="primary" shape="rounded-pill">{{ lignes.length }}</c-badge>
+    </div>
+    <button cButton color="primary" size="sm" routerLink="/lignes/add">
+      + Ajouter une ligne
+    </button>
+  </c-card-header>
+
+  <c-card-body>
+    @if (loading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2 text-muted">Chargement des lignes...</p>
+      </div>
+    } @else if (lignes.length === 0) {
+      <div class="text-center py-5">
+        <div style="font-size:3rem">🛤️</div>
+        <h6 class="mt-2 text-muted">Aucune ligne enregistrée</h6>
+        <button cButton color="primary" size="sm" routerLink="/lignes/add">Ajouter la première ligne</button>
+      </div>
+    } @else {
+      <table cTable hover striped responsive>
+        <thead cTableHead color="light">
+          <tr>
+            <th scope="col" style="width:80px">#</th>
+            <th scope="col">Numéro</th>
+            <th scope="col">Destination</th>
+            <th scope="col" class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody cTableBody>
+          @for (l of lignes; track l.id) {
+            <tr>
+              <td><c-badge color="secondary" shape="rounded-pill">{{ l.id }}</c-badge></td>
+              <td><span class="fw-semibold text-primary">🚌 {{ l.numero }}</span></td>
+              <td>{{ l.destination }}</td>
+              <td class="text-end">
+                <div class="d-flex justify-content-end gap-1">
+                  <button cButton color="info" size="sm" variant="outline" [routerLink]="['/lignes/detail', l.id]" title="Détails">👁️</button>
+                  <button cButton color="warning" size="sm" variant="outline" [routerLink]="['/lignes/edit', l.id]" title="Modifier">✏️</button>
+                  <button cButton color="danger" size="sm" variant="outline" (click)="deleteLigne(l.id!)" title="Supprimer">🗑️</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </c-card-body>
+</c-card>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced

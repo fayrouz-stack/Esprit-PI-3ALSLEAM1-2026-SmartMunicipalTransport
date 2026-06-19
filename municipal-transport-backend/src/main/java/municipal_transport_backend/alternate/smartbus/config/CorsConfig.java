@@ -28,7 +28,11 @@ public class CorsConfig {
         source.registerCorsConfiguration("/**", config);
 
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+<<<<<<< HEAD
         bean.setOrder(-200); // avant Spring Security (order -100) et tous les autres filtres
+=======
+        bean.setOrder(-100); // avant tous les autres filtres
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
         return bean;
     }
 }

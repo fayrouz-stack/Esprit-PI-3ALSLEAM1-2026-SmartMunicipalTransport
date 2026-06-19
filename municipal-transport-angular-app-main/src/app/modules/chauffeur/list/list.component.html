@@ -4,13 +4,18 @@
     <div class="d-flex align-items-center gap-2">
       <span style="font-size:1.4rem">👤</span>
       <strong class="fs-5 mb-0">Gestion des chauffeurs</strong>
+<<<<<<< HEAD
       <c-badge color="light" class="text-dark ms-1" shape="rounded-pill">{{ totalItems }}</c-badge>
+=======
+      <c-badge color="light" class="text-dark ms-1">{{ totalItems }}</c-badge>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     </div>
     <button cButton color="light" size="sm" routerLink="/chauffeurs/add"
             style="color:#321fdb;font-weight:600">+ Ajouter</button>
   </c-card-header>
 
   <c-card-body>
+<<<<<<< HEAD
 
     <!-- KPI cards -->
     @if (!loading && chauffeurs.length > 0) {
@@ -59,12 +64,26 @@
       </div>
       <div class="col-md-2">
         <button cButton color="secondary" variant="outline" class="w-100" (click)="resetFilters()">↺ Reset</button>
+=======
+    <!-- Filtres -->
+    <div class="row mb-3 g-2 align-items-end">
+      <div class="col-md-8">
+        <div class="input-group">
+          <span class="input-group-text">🔍</span>
+          <input cFormControl type="text" placeholder="Rechercher par CIN, nom, prénom..."
+                 [(ngModel)]="searchTerm" (input)="applyFilters()">
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button cButton color="secondary" variant="outline" class="w-100" (click)="resetFilters()">Réinitialiser</button>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
       </div>
     </div>
 
     <!-- Tableau -->
     <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
+<<<<<<< HEAD
         <thead class="table-dark">
           <tr>
             <th>👤 Chauffeur</th>
@@ -73,15 +92,30 @@
             <th>📞 Contact</th>
             <th>🏖️ Congés</th>
             <th>💼 Jours trav.</th>
+=======
+        <thead class="table-light">
+          <tr>
+            <th>Chauffeur</th>
+            <th>CIN</th>
+            <th>Permis</th>
+            <th>Contact</th>
+            <th>Matricule</th>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
             <th class="text-end">Actions</th>
           </tr>
         </thead>
         <tbody>
           @if (loading) {
             <tr>
+<<<<<<< HEAD
               <td colspan="7" class="text-center py-5">
                 <div class="spinner-border text-primary spinner-border-sm me-2"></div>
                 Chargement des chauffeurs...
+=======
+              <td colspan="6" class="text-center py-4">
+                <div class="spinner-border text-primary spinner-border-sm me-2"></div>
+                Chargement...
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
               </td>
             </tr>
           } @else {
@@ -93,26 +127,38 @@
                          style="width:38px;height:38px;background:linear-gradient(135deg,#321fdb,#1b8eb7);font-size:.75rem">
                       {{ (chauffeur.nom?.[0] ?? '?') }}{{ (chauffeur.prenom?.[0] ?? '') }}
                     </div>
+<<<<<<< HEAD
                     <div>
                       <div class="fw-semibold">{{ chauffeur.nom }} {{ chauffeur.prenom }}</div>
                       <code class="small text-muted">{{ chauffeur.matricule }}</code>
                     </div>
+=======
+                    <div class="fw-semibold">{{ chauffeur.nom }} {{ chauffeur.prenom }}</div>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
                   </div>
                 </td>
                 <td class="text-muted small">{{ chauffeur.cin }}</td>
                 <td>
+<<<<<<< HEAD
                   <c-badge color="info" shape="rounded-pill" style="font-size:.8rem">🪪 {{ chauffeur.permis }}</c-badge>
+=======
+                  <c-badge color="info" style="font-size:.8rem">{{ chauffeur.permis }}</c-badge>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
                 </td>
                 <td>
                   <div class="small">📞 {{ chauffeur.telephone }}</div>
                   <div class="small text-muted">{{ chauffeur.email }}</div>
                 </td>
+<<<<<<< HEAD
                 <td>
                   <c-badge [color]="congesColor(chauffeur.holidayRemaining)" shape="rounded-pill">
                     {{ chauffeur.holidayRemaining ?? 0 }} j
                   </c-badge>
                 </td>
                 <td class="fw-semibold">{{ chauffeur.countWorkDays ?? 0 }} j</td>
+=======
+                <td><code>{{ chauffeur.matricule }}</code></td>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
                 <td class="text-end">
                   <button class="btn btn-sm btn-outline-info me-1" [routerLink]="['/chauffeurs', chauffeur.id]" title="Détails">👁</button>
                   <button class="btn btn-sm btn-outline-warning me-1" [routerLink]="['/chauffeurs/edit', chauffeur.id]" title="Modifier">✏️</button>
@@ -121,10 +167,16 @@
               </tr>
             } @empty {
               <tr>
+<<<<<<< HEAD
                 <td colspan="7" class="text-center py-5">
                   <div style="font-size:2.5rem">👤</div>
                   <div class="text-muted mt-2 fw-semibold">Aucun chauffeur pour ces filtres</div>
                   <button cButton color="secondary" variant="outline" size="sm" class="mt-2" (click)="resetFilters()">↺ Réinitialiser</button>
+=======
+                <td colspan="6" class="text-center py-5">
+                  <div style="font-size:2.5rem">👤</div>
+                  <div class="text-muted mt-2">Aucun chauffeur trouvé</div>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
                 </td>
               </tr>
             }
@@ -147,6 +199,9 @@
         </div>
       </div>
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   </c-card-body>
 </c-card>

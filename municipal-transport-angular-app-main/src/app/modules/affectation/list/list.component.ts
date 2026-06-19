@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+<<<<<<< HEAD
 import { forkJoin } from 'rxjs';
 import { AffectationService } from '../affectation.service';
 import { Affectation } from '../affectation.model';
@@ -8,6 +9,10 @@ import { LigneService } from '../../ligne/ligne.service';
 import { Chauffeur } from '../../chauffeur/chauffeur.model';
 import { Vehicule } from '../../vehicule/vehicule.model';
 import { Ligne } from '../../ligne/ligne.model';
+=======
+import { AffectationService } from '../affectation.service';
+import { Affectation } from '../affectation.model';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
 @Component({
   selector: 'app-affectation-list',
@@ -18,6 +23,7 @@ import { Ligne } from '../../ligne/ligne.model';
 })
 export class AffectationListComponent implements OnInit {
 
+<<<<<<< HEAD
   private service        = inject(AffectationService);
   private chauffeurSvc   = inject(ChauffeurService);
   private vehiculeSvc    = inject(VehiculeService);
@@ -33,6 +39,15 @@ export class AffectationListComponent implements OnInit {
   loading = false;
   filterStatut = '';
   filterLigne = '';
+=======
+  private service = inject(AffectationService);
+  private cdr = inject(ChangeDetectorRef);
+
+  affectations: Affectation[] = [];
+  filtered: Affectation[] = [];
+  loading = false;
+  filterStatut = '';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   searchTerm = '';
 
   ngOnInit(): void {
@@ -40,6 +55,7 @@ export class AffectationListComponent implements OnInit {
   }
 
   load(): void {
+<<<<<<< HEAD
     this.loading = true;
     forkJoin({
       affectations: this.service.getAll(),
@@ -58,6 +74,15 @@ export class AffectationListComponent implements OnInit {
           this.loading = false;
           this.cdr.markForCheck();
         }
+=======
+    if (this.affectations.length === 0) this.loading = true;
+    this.service.getAll().subscribe({
+      next: (data) => {
+        this.affectations = data;
+        this.applyFilters();
+        this.loading = false;
+        this.cdr.markForCheck();
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
       },
       error: (err) => {
         console.error('Erreur chargement affectations', err);
@@ -69,6 +94,7 @@ export class AffectationListComponent implements OnInit {
 
   applyFilters(): void {
     const s = this.searchTerm.toLowerCase();
+<<<<<<< HEAD
     this.filtered = this.affectations.filter(a => {
       const c = this.getChauffeur(a.chauffeurId);
       const v = this.getVehicule(a.vehiculeId);
@@ -104,6 +130,12 @@ export class AffectationListComponent implements OnInit {
     const h = Math.floor(diff / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
     return h > 0 ? `${h}h${m.toString().padStart(2,'0')}` : `${m}min`;
+=======
+    this.filtered = this.affectations.filter(a =>
+      (!this.filterStatut || a.statut === this.filterStatut) &&
+      (!s || String(a.chauffeurId).includes(s) || String(a.vehiculeId).includes(s) || String(a.ligneId).includes(s))
+    );
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   }
 
   deleteAffectation(id: number): void {
@@ -124,6 +156,7 @@ export class AffectationListComponent implements OnInit {
       default:          return 'secondary';
     }
   }
+<<<<<<< HEAD
 
   get stats() {
     return {
@@ -134,4 +167,6 @@ export class AffectationListComponent implements OnInit {
       annulees:   this.affectations.filter(a => a.statut === 'ANNULEE').length,
     };
   }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

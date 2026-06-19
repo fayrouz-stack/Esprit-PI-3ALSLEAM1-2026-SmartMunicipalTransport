@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -9,10 +10,17 @@ import { LigneService } from '../../ligne/ligne.service';
 import { Chauffeur } from '../../chauffeur/chauffeur.model';
 import { Vehicule } from '../../vehicule/vehicule.model';
 import { Ligne } from '../../ligne/ligne.model';
+=======
+import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AffectationService } from '../affectation.service';
+import { Affectation } from '../affectation.model';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
 @Component({
   selector: 'app-affectation-detail',
   standalone: false,
+<<<<<<< HEAD
   templateUrl: './detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -29,6 +37,16 @@ export class AffectationDetailComponent implements OnInit {
   chauffeur: Chauffeur | null = null;
   vehicule: Vehicule | null = null;
   ligne: Ligne | null = null;
+=======
+  templateUrl: './detail.component.html'
+})
+export class AffectationDetailComponent implements OnInit {
+  private service = inject(AffectationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  affectation: Affectation | null = null;
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   loading = false;
 
   readonly statutColors: Record<string, string> = {
@@ -43,6 +61,7 @@ export class AffectationDetailComponent implements OnInit {
     if (!id) { this.router.navigate(['/affectations']); return; }
     this.loading = true;
     this.service.getById(id).subscribe({
+<<<<<<< HEAD
       next: (a) => {
         this.affectation = a;
         forkJoin({
@@ -63,10 +82,14 @@ export class AffectationDetailComponent implements OnInit {
           error: () => { this.loading = false; this.cdr.markForCheck(); }
         });
       },
+=======
+      next: (data) => { this.affectation = data; this.loading = false; },
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
       error: () => { this.loading = false; this.router.navigate(['/affectations']); }
     });
   }
 
+<<<<<<< HEAD
   duree(): string {
     if (!this.affectation?.dateDebut || !this.affectation?.dateFin) return '—';
     const diff = new Date(this.affectation.dateFin).getTime() - new Date(this.affectation.dateDebut).getTime();
@@ -95,4 +118,13 @@ export class AffectationDetailComponent implements OnInit {
   back(): void {
     this.router.navigate(['/affectations']);
   }
+=======
+  back(): void {
+    this.router.navigate(['/affectations']);
+  }
+
+  statutColor(statut?: string): string {
+    return this.statutColors[statut ?? ''] ?? 'secondary';
+  }
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

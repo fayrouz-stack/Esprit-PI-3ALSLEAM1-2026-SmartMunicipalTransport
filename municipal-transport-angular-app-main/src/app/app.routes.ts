@@ -1,6 +1,9 @@
 import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './layout';
+<<<<<<< HEAD
 import { authGuard } from './auth/auth.guard';
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
 export const routes: Routes = [
   {
@@ -12,7 +15,10 @@ export const routes: Routes = [
   {
     path: '',
     component: DefaultLayoutComponent,
+<<<<<<< HEAD
     canActivate: [authGuard],
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     children: [
       {
         path: 'dashboard',
@@ -45,10 +51,13 @@ export const routes: Routes = [
         loadChildren: () => import('./modules/voyage/voyage.module').then((m) => m.VoyageModule)
       },
       {
+<<<<<<< HEAD
         path: 'incidents',
         loadChildren: () => import('./modules/incident/incident.module').then((m) => m.IncidentModule)
       },
       {
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
         path: 'tickets',
         loadChildren: () => import('./modules/ticket/ticket.module').then((m) => m.TicketModule)
       },

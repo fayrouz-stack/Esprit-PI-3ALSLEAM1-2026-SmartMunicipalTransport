@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { ChangeDetectorRef, Component, DestroyRef, DOCUMENT, effect, inject, OnInit, Renderer2, signal, WritableSignal } from '@angular/core';
+=======
+import { Component, DestroyRef, DOCUMENT, effect, inject, OnInit, Renderer2, signal, WritableSignal } from '@angular/core';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -54,7 +58,10 @@ export class DashboardComponent implements OnInit {
   readonly #renderer: Renderer2 = inject(Renderer2);
   readonly #chartsData: DashboardChartsData = inject(DashboardChartsData);
   readonly #dashboardService: DashboardService = inject(DashboardService);
+<<<<<<< HEAD
   readonly #cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
   public stats: DashboardStats = { ...EMPTY_STATS };
   public users: IUser[] = [];
@@ -110,9 +117,15 @@ export class DashboardComponent implements OnInit {
       next: chauffeurs => {
         try {
           const list = chauffeurs ?? [];
+<<<<<<< HEAD
           const thirtyDaysAgo = Date.now() - 30 * 24 * 3600 * 1000;
           const actifs = list.filter((c: any) =>
             c.lastShiftEnd && new Date(c.lastShiftEnd).getTime() >= thirtyDaysAgo
+=======
+          const sevenDaysAgo = Date.now() - 7 * 24 * 3600 * 1000;
+          const actifs = list.filter((c: any) =>
+            c.lastShiftEnd && new Date(c.lastShiftEnd).getTime() >= sevenDaysAgo
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
           ).length;
           this.stats = {
             ...this.stats,
@@ -140,18 +153,29 @@ export class DashboardComponent implements OnInit {
       const diffH = lastEnd ? Math.floor((Date.now() - lastEnd.getTime()) / 3_600_000) : 9999;
       let activity: string;
       let status: string;
+<<<<<<< HEAD
       if      (diffH <  2)  { activity = 'Il y a moins de 2h';              status = 'success';   }
       else if (diffH < 24)  { activity = `Il y a ${diffH}h`;                status = 'success';   }
       else if (diffH < 48)  { activity = 'Hier';                            status = 'info';      }
       else if (diffH < 720) { activity = `Il y a ${Math.floor(diffH/24)}j`; status = 'warning';   }
       else                  { activity = 'Inactif';                         status = 'secondary'; }
+=======
+      if      (diffH <  2)  { activity = 'Il y a moins de 2h';         status = 'success';   }
+      else if (diffH < 24)  { activity = `Il y a ${diffH}h`;            status = 'success';   }
+      else if (diffH < 48)  { activity = 'Hier';                        status = 'info';      }
+      else                  { activity = `Il y a ${Math.floor(diffH / 24)}j`; status = 'secondary'; }
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
       const ds = c.dateStart ? new Date(c.dateStart) : null;
       const registered = ds
         ? `${ds.getDate()} ${MONTHS[ds.getMonth()]} ${ds.getFullYear()}`
         : 'N/A';
       return {
         name:       `${c.prenom} ${c.nom}`,
+<<<<<<< HEAD
         state:      diffH < 720 ? 'Actif' : 'Hors service',
+=======
+        state:      diffH < 24 ? 'Actif' : 'Hors service',
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
         registered,
         country:    'Tn',
         usage:      Math.round((c.countWorkDays ?? 0) / maxDays * 100),

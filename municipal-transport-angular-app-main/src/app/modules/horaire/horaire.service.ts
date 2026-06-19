@@ -17,10 +17,13 @@ export class HoraireService {
     return this.http.get<Horaire[]>(this.apiUrl).pipe(tap(data => this.cache = data));
   }
 
+<<<<<<< HEAD
   getByLigne(ligneId: number): Observable<Horaire[]> {
     return this.http.get<Horaire[]>(`${this.apiUrl}/by-ligne/${ligneId}`);
   }
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   getById(id: number): Observable<Horaire> {
     const cached = this.cache?.find(h => h.id === id);
     if (cached) return of(cached);
@@ -38,6 +41,7 @@ export class HoraireService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(tap(() => this.cache = null));
   }
+<<<<<<< HEAD
 
   estimerRetard(id: number, vehiculeId?: number | null): Observable<EstimationRetard> {
     const body = vehiculeId ? { vehiculeId } : {};
@@ -52,4 +56,6 @@ export interface EstimationRetard {
   trafic:   { label: string; minutes: number; color: string };
   meteo:    { label: string; minutes: number };
   vehicule: { label: string; minutes: number; info?: string };
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

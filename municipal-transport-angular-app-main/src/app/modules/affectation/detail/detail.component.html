@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 <c-card class="mb-4">
   <c-card-header class="d-flex align-items-center gap-2"
     style="background:linear-gradient(135deg,#321fdb,#6f42c1);color:white">
+=======
+<c-card class="mb-4" style="max-width:640px; margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2" style="background: linear-gradient(135deg,#321fdb,#6f42c1); color:white">
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     <span style="font-size:1.3rem">📋</span>
     <strong class="fs-5 mb-0">Détails de l'affectation</strong>
     @if (affectation) {
@@ -14,6 +19,7 @@
         <div class="spinner-border text-primary"></div>
       </div>
     } @else if (affectation) {
+<<<<<<< HEAD
 
       <!-- Statut banner -->
       <div class="d-flex align-items-center justify-content-between p-3 rounded mb-4"
@@ -136,6 +142,68 @@
       }
 
       <div class="d-flex justify-content-end gap-2 mt-2">
+=======
+      <div class="row g-3">
+
+        <div class="col-md-4">
+          <div class="p-3 rounded" style="background:#f8f9fa; border-left:4px solid #321fdb">
+            <small class="text-muted text-uppercase fw-semibold">Chauffeur</small>
+            <div class="fs-5 fw-bold mt-1">👤 #{{ affectation.chauffeurId }}</div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="p-3 rounded" style="background:#f8f9fa; border-left:4px solid #2eb85c">
+            <small class="text-muted text-uppercase fw-semibold">Véhicule</small>
+            <div class="fs-5 fw-bold mt-1">🚌 #{{ affectation.vehiculeId }}</div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="p-3 rounded" style="background:#f8f9fa; border-left:4px solid #1b8eb7">
+            <small class="text-muted text-uppercase fw-semibold">Ligne</small>
+            <div class="fs-5 fw-bold mt-1">🛤️ #{{ affectation.ligneId }}</div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f9fa; border-left:4px solid #f9a825">
+            <small class="text-muted text-uppercase fw-semibold">Date début</small>
+            <div class="mt-1">📅 {{ affectation.dateDebut | date:'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f9fa; border-left:4px solid #e55353">
+            <small class="text-muted text-uppercase fw-semibold">Date fin</small>
+            <div class="mt-1">📅 {{ affectation.dateFin | date:'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="p-3 rounded" style="background:#f8f9fa; border-left:4px solid #6f42c1">
+            <small class="text-muted text-uppercase fw-semibold">Statut</small>
+            <div class="mt-2">
+              <c-badge [color]="statutColor(affectation.statut)" style="font-size:0.95rem; padding:.4rem .8rem">
+                {{ affectation.statut || 'Non défini' }}
+              </c-badge>
+            </div>
+          </div>
+        </div>
+
+        @if (affectation.remarque) {
+          <div class="col-12">
+            <div class="p-3 rounded" style="background:#f8f9fa; border-left:4px solid #6c757d">
+              <small class="text-muted text-uppercase fw-semibold">Remarque</small>
+              <div class="mt-1">💬 {{ affectation.remarque }}</div>
+            </div>
+          </div>
+        }
+
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
         <button cButton color="secondary" variant="outline" (click)="back()">← Retour</button>
         <button cButton color="warning" variant="outline" [routerLink]="['/affectations/edit', affectation.id]">✏️ Modifier</button>
       </div>

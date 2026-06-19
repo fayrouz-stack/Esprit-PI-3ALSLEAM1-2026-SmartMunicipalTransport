@@ -12,11 +12,14 @@ export const navItems: INavData[] = [
     icon: 'cil-car'
   },
   {
+<<<<<<< HEAD
     name: 'Carte Flotte 🗺️',
     url: '/vehicules/fleet',
     icon: 'cil-map'
   },
   {
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     name: 'Chauffeurs',
     url: '/chauffeurs',
     iconComponent: { name: 'cil-people' }
@@ -42,11 +45,14 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-bus-alt' }
   },
   {
+<<<<<<< HEAD
     name: 'Alertes caméra',
     url: '/incidents',
     iconComponent: { name: 'cil-camera' }
   },
   {
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     name: 'Tickets',
     url: '/tickets',
     iconComponent: { name: 'cil-money' }

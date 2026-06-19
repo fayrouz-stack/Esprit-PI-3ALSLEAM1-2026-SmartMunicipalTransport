@@ -1,6 +1,7 @@
 package municipal_transport_backend.alternate.smartbus.controller;
 
 import municipal_transport_backend.alternate.smartbus.entity.Horaire;
+<<<<<<< HEAD
 import municipal_transport_backend.alternate.smartbus.entity.Vehicule;
 import municipal_transport_backend.alternate.smartbus.service.HoraireService;
 import municipal_transport_backend.alternate.smartbus.service.VehiculeService;
@@ -14,6 +15,13 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+=======
+import municipal_transport_backend.alternate.smartbus.service.HoraireService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
 @RestController
 @RequestMapping("/api/horaires")
@@ -22,9 +30,12 @@ public class HoraireController {
     @Autowired
     private HoraireService horaireService;
 
+<<<<<<< HEAD
     @Autowired
     private VehiculeService vehiculeService;
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     @GetMapping
     public List<Horaire> getAll() {
         return horaireService.findAll();
@@ -35,11 +46,14 @@ public class HoraireController {
         return horaireService.findAll();
     }
 
+<<<<<<< HEAD
     @GetMapping("/by-ligne/{ligneId}")
     public List<Horaire> getByLigne(@PathVariable Integer ligneId) {
         return horaireService.findByLigneId(ligneId);
     }
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
     @GetMapping("/{id}")
     public Horaire getById(@PathVariable Integer id) {
         return horaireService.findById(id);
@@ -59,6 +73,7 @@ public class HoraireController {
     public void delete(@PathVariable Integer id) {
         horaireService.delete(id);
     }
+<<<<<<< HEAD
 
     /**
      * Estime le retard d'un horaire en tenant compte :
@@ -178,4 +193,6 @@ public class HoraireController {
 
         return ResponseEntity.ok(result);
     }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

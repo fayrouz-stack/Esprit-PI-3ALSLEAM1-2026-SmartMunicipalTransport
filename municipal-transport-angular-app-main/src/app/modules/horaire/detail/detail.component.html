@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <c-card class="mb-4" style="max-width:600px; margin:auto">
   <c-card-header class="d-flex align-items-center gap-2" style="background: linear-gradient(135deg,#321fdb,#6f42c1); color:white">
     <span style="font-size:1.3rem">🕐</span>
@@ -186,4 +187,57 @@
       <button cButton color="warning" variant="outline" [routerLink]="['/horaires/edit', horaire.id]">✏️ Modifier</button>
     </div>
   </c-card-body>
+=======
+<c-card class="mb-4" style="max-width:600px; margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2" style="background: linear-gradient(135deg,#321fdb,#6f42c1); color:white">
+    <span style="font-size:1.3rem">🕐</span>
+    <strong class="fs-5 mb-0">Détails de l'horaire</strong>
+    <c-badge color="light" class="ms-auto text-dark">ID #{{ horaire?.id }}</c-badge>
+  </c-card-header>
+
+  <c-card-body>
+    <div *ngIf="!horaire" class="text-center py-4">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div *ngIf="horaire" class="row g-3">
+      <div class="col-12">
+        <div class="p-3 rounded" style="background:#f8f9fa; border-left: 4px solid #321fdb">
+          <small class="text-muted text-uppercase fw-semibold">Date du voyage</small>
+          <div class="fs-5 fw-bold mt-1">📅 {{ horaire.date_voyage | date:'EEEE dd MMMM yyyy':'':'fr' }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="p-3 rounded" style="background:#f8f9fa; border-left: 4px solid #2eb85c">
+          <small class="text-muted text-uppercase fw-semibold">Départ</small>
+          <div class="fs-4 fw-bold text-success mt-1">🟢 {{ horaire.horaire_depart ? (horaire.horaire_depart | slice:0:5) : '-' }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="p-3 rounded" style="background:#f8f9fa; border-left: 4px solid #e55353">
+          <small class="text-muted text-uppercase fw-semibold">Arrivée</small>
+          <div class="fs-4 fw-bold text-danger mt-1">🔴 {{ horaire.horaire_arrive ? (horaire.horaire_arrive | slice:0:5) : '-' }}</div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="p-3 rounded" style="background:#f8f9fa; border-left: 4px solid #6f42c1">
+          <small class="text-muted text-uppercase fw-semibold">Retard estimé</small>
+          <div class="mt-2">
+            <c-badge [color]="(horaire.retard_estime ?? 0) > 0 ? 'danger' : 'success'" style="font-size:1rem; padding:.5rem 1rem">
+              {{ (horaire.retard_estime ?? 0) > 0 ? ('⏱️ ' + horaire.retard_estime + ' minutes de retard') : '✅ À l\'heure' }}
+            </c-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4" *ngIf="horaire">
+      <button cButton color="secondary" variant="outline" (click)="back()">← Retour</button>
+      <button cButton color="warning" variant="outline" [routerLink]="['/horaires/edit', horaire.id]">✏️ Modifier</button>
+    </div>
+  </c-card-body>
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 </c-card>

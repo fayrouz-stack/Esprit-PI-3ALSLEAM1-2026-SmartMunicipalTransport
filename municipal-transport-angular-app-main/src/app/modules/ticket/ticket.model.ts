@@ -16,6 +16,7 @@ export interface TicketStats {
   revenuTotal: number;
   ticketsAujourdhui: number;
 }
+<<<<<<< HEAD
 
 export interface TicketValidateResult {
   message: string;
@@ -24,3 +25,5 @@ export interface TicketValidateResult {
   voyageDest: string;
   statut: string;
 }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced

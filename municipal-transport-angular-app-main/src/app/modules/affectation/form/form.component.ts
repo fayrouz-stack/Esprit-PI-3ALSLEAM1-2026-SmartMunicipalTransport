@@ -1,7 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AffectationService } from '../affectation.service';
+<<<<<<< HEAD
 import { Affectation, AutoAssignRequest } from '../affectation.model';
+=======
+import { Affectation } from '../affectation.model';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import { ChauffeurService } from '../../chauffeur/chauffeur.service';
 import { VehiculeService } from '../../vehicule/vehicule.service';
 import { LigneService } from '../../ligne/ligne.service';
@@ -26,11 +30,14 @@ export class AffectationFormComponent implements OnInit {
   errorMsg = '';
   isEdit = false;
 
+<<<<<<< HEAD
   // Mode création : 'manuel' | 'auto'
   autoMode      = false;
   autoAssigning = false;
   autoError     = '';
 
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   chauffeurs: any[] = [];
   vehicules: any[] = [];
   lignes: any[] = [];
@@ -106,6 +113,7 @@ export class AffectationFormComponent implements OnInit {
       }
     });
   }
+<<<<<<< HEAD
 
   /**
    * Envoie une requête POST /api/affectations/auto avec la ligne et les dates.
@@ -144,4 +152,6 @@ export class AffectationFormComponent implements OnInit {
       }
     });
   }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 }

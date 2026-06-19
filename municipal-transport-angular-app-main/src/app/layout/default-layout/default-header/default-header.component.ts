@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, input, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+=======
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
@@ -24,17 +29,25 @@ import {
 } from '@coreui/angular';
 
 import { IconDirective } from '@coreui/icons-angular';
+<<<<<<< HEAD
 import { ViolenceDetectionService } from '../../../services/violence-detection.service';
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
 @Component({
   selector: 'app-default-header',
   templateUrl: './default-header.component.html',
+<<<<<<< HEAD
   imports: [ContainerComponent, HeaderTogglerDirective, SidebarToggleDirective, IconDirective, HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive, NgIf, NgTemplateOutlet, BreadcrumbRouterComponent, DropdownComponent, DropdownToggleDirective, AvatarComponent, DropdownMenuDirective, DropdownHeaderDirective, DropdownItemDirective, BadgeComponent, DropdownDividerDirective]
+=======
+  imports: [ContainerComponent, HeaderTogglerDirective, SidebarToggleDirective, IconDirective, HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive, NgTemplateOutlet, BreadcrumbRouterComponent, DropdownComponent, DropdownToggleDirective, AvatarComponent, DropdownMenuDirective, DropdownHeaderDirective, DropdownItemDirective, BadgeComponent, DropdownDividerDirective]
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 })
 export class DefaultHeaderComponent extends HeaderComponent {
 
   readonly #colorModeService = inject(ColorModeService);
   readonly colorMode = this.#colorModeService.colorMode;
+<<<<<<< HEAD
   readonly destroyRef = inject(DestroyRef);
   readonly violenceDetectionService = inject(ViolenceDetectionService);
   public violenceDetected = false;
@@ -51,6 +64,8 @@ export class DefaultHeaderComponent extends HeaderComponent {
   public clearViolenceAlert(): void {
     this.violenceDetectionService.acknowledgeViolenceAlert();
   }
+=======
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
 
   readonly colorModes = [
     { name: 'light', text: 'Light', icon: 'cilSun' },
@@ -62,6 +77,14 @@ export class DefaultHeaderComponent extends HeaderComponent {
     const currentMode = this.colorMode();
     return this.colorModes.find(mode => mode.name === currentMode)?.icon ?? 'cilSun';
   });
+<<<<<<< HEAD
+=======
+
+  constructor() {
+    super();
+  }
+
+>>>>>>> f141314d577dc66fb48869aa744bb9618de13ced
   sidebarId = input('sidebar1');
 
   public newMessages = [

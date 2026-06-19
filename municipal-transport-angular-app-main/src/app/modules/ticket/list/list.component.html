@@ -1,0 +1,116 @@
+<c-card class="mb-4">
+  <c-card-header class="d-flex justify-content-between align-items-center"
+    style="background: linear-gradient(135deg,#6610f2,#4c0099); color:white">
+    <div class="d-flex align-items-center gap-2">
+      <span style="font-size:1.3rem">🎫</span>
+      <strong class="fs-5 mb-0">Gestion des Tickets</strong>
+      <c-badge color="light" class="text-dark" shape="rounded-pill">{{ filteredTickets.length }}</c-badge>
+    </div>
+    <button cButton color="light" size="sm" variant="outline" routerLink="/tickets/add">
+      + Nouveau ticket
+    </button>
+  </c-card-header>
+
+  <c-card-body>
+    <div class="row mb-3 g-2 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label text-muted small fw-semibold">Recherche</label>
+        <input cFormControl type="text"
+          placeholder="Numéro, passager, email..."
+          [(ngModel)]="searchTerm"
+          (input)="applyFilters()" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted small fw-semibold">Statut</label>
+        <select cSelect [(ngModel)]="filterStatut" (change)="applyFilters()">
+          <option value="">Tous les statuts</option>
+          <option value="PAYE">Payé</option>
+          <option value="EN_ATTENTE">En attente</option>
+          <option value="ANNULE">Annulé</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button cButton color="secondary" variant="outline" size="sm" (click)="resetFilters()">↺ Réinitialiser</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead style="background:#f0ecff">
+          <tr>
+            <th>Numéro</th>
+            <th>Voyage</th>
+            <th>Passager</th>
+            <th class="text-center">Billets</th>
+            <th>Montant</th>
+            <th>Méthode</th>
+            <th>Statut</th>
+            <th>Date</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (loading) {
+            <tr>
+              <td colspan="9" class="text-center py-4">
+                <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                Chargement...
+              </td>
+            </tr>
+          } @else {
+            @for (t of paginatedTickets; track t.id) {
+              <tr>
+                <td>
+                  <span class="fw-bold" style="color:#6610f2">🎫 {{ t.numero }}</span>
+                </td>
+                <td><c-badge color="secondary" shape="rounded-pill">#{{ t.voyageId }}</c-badge></td>
+                <td>
+                  <div class="fw-semibold">{{ t.passagerNom }}</div>
+                  <small class="text-muted">{{ t.passagerEmail || '—' }}</small>
+                </td>
+                <td class="text-center">
+                  <c-badge color="info" shape="rounded-pill">{{ t.nombreBillets }}</c-badge>
+                </td>
+                <td class="fw-semibold">{{ t.montantTotal | number:'1.2-2' }} <small class="text-muted">DT</small></td>
+                <td><small>{{ t.methodePaiement }}</small></td>
+                <td>
+                  <c-badge [color]="statutBadgeColor(t.statut)">{{ t.statut }}</c-badge>
+                </td>
+                <td><small class="text-muted">{{ t.dateCreation | date:'dd/MM/yy HH:mm' }}</small></td>
+                <td class="text-end">
+                  <div class="d-flex justify-content-end gap-1">
+                    <button cButton color="info" size="sm" variant="outline"
+                      [routerLink]="['/tickets', t.id]" title="Détails">👁</button>
+                    <button cButton color="warning" size="sm" variant="outline"
+                      [routerLink]="['/tickets/edit', t.id]" title="Modifier">✏️</button>
+                    <button cButton color="danger" size="sm" variant="outline"
+                      (click)="deleteTicket(t.id!)" title="Supprimer">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="9" class="text-center py-5 text-muted">
+                  <div style="font-size:2.5rem">🎫</div>
+                  <p class="mt-2 mb-0">Aucun ticket trouvé</p>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (totalPages > 1) {
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <small class="text-muted">Page {{ currentPage }} / {{ totalPages }} — {{ totalItems }} ticket(s)</small>
+        <div class="d-flex gap-1">
+          <button cButton color="secondary" size="sm" variant="outline"
+            [disabled]="currentPage === 1" (click)="previousPage()">‹</button>
+          <button cButton color="secondary" size="sm" variant="outline"
+            [disabled]="currentPage === totalPages" (click)="nextPage()">›</button>
+        </div>
+      </div>
+    }
+  </c-card-body>
+</c-card>

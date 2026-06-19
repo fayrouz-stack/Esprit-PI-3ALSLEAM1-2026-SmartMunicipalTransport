@@ -1,0 +1,74 @@
+<div *ngIf="!station" class="text-center py-4">
+  <div class="spinner-border text-success"></div>
+</div>
+
+<div *ngIf="station">
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#2eb85c,#1a7a3f);border-radius:16px;
+              padding:24px 28px;color:white;margin-bottom:20px;position:relative;overflow:hidden">
+    <div style="position:absolute;right:-30px;top:-30px;width:120px;height:120px;
+                background:rgba(255,255,255,.1);border-radius:50%"></div>
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <div style="font-size:2.5rem">🏢</div>
+      <div>
+        <h4 class="mb-0 fw-bold">{{ station.nom }}</h4>
+        <div style="opacity:.85">📍 {{ station.adresse }}, {{ station.ville }}</div>
+      </div>
+      <div class="ms-auto d-flex gap-2">
+        <c-badge color="light" style="color:#2eb85c;font-size:.9rem">ID #{{ station.id }}</c-badge>
+        <c-badge color="warning" style="font-size:.9rem">{{ lignesPassant.length }} ligne(s)</c-badge>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #2eb85c">
+        <small class="text-muted text-uppercase fw-semibold">Nom</small>
+        <div class="fs-5 fw-bold text-success mt-1">📍 {{ station.nom }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #6c757d">
+        <small class="text-muted text-uppercase fw-semibold">Adresse</small>
+        <div class="mt-1">📮 {{ station.adresse }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #1a7a3f">
+        <small class="text-muted text-uppercase fw-semibold">Ville</small>
+        <div class="mt-1">🏙️ {{ station.ville }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lignes passant par cette station -->
+  <c-card class="mb-3">
+    <c-card-header style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white;border-radius:8px 8px 0 0">
+      <strong>🛤️ Lignes passant par {{ station.nom }}</strong>
+    </c-card-header>
+    <c-card-body>
+      <div *ngIf="lignesPassant.length === 0" class="text-center py-3">
+        <p class="text-muted">❌ Aucune ligne ne passe par cette station</p>
+      </div>
+      <div class="row g-2">
+        <div class="col-md-4" *ngFor="let l of lignesPassant">
+          <a [routerLink]="['/lignes/detail', l.id]" style="text-decoration:none">
+            <div style="background:linear-gradient(135deg,rgba(50,31,219,.1),rgba(27,142,183,.05));
+                        border:1px solid rgba(50,31,219,.25);border-radius:12px;padding:14px;
+                        cursor:pointer;transition:.2s">
+              <div class="fw-bold text-primary">🚌 {{ l.numero }}</div>
+              <div class="small text-muted mt-1">📍 {{ l.destination }}</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </c-card-body>
+  </c-card>
+
+  <div class="d-flex gap-2">
+    <button cButton color="secondary" variant="outline" (click)="back()">← Retour</button>
+    <button cButton color="warning" variant="outline" [routerLink]="['/stations/edit', station.id]">✏️ Modifier</button>
+  </div>
+</div>

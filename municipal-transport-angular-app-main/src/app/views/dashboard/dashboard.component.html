@@ -1,0 +1,421 @@
+<!-- ═══════════════════════════════════════════ CHAT WIDGET (floating) -->
+<app-chat-widget />
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO BANNER
+══════════════════════════════════════════════════════════════ -->
+<div style="background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);
+            border-radius:20px;padding:32px 36px;margin-bottom:24px;
+            color:white;position:relative;overflow:hidden">
+  <div style="position:absolute;right:-60px;top:-60px;width:250px;height:250px;
+              background:rgba(255,255,255,.04);border-radius:50%;pointer-events:none"></div>
+  <div style="position:absolute;right:80px;bottom:-80px;width:350px;height:350px;
+              background:rgba(255,255,255,.03);border-radius:50%;pointer-events:none"></div>
+  <div style="position:absolute;left:45%;top:-40px;width:180px;height:180px;
+              background:rgba(99,102,241,.15);border-radius:50%;pointer-events:none"></div>
+  <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+    <div style="background:rgba(255,255,255,.12);border-radius:16px;width:64px;height:64px;
+                display:flex;align-items:center;justify-content:center;font-size:2.2rem;
+                backdrop-filter:blur(10px);flex-shrink:0">🚌</div>
+    <div>
+      <h2 class="mb-0 fw-bold" style="font-size:1.7rem;letter-spacing:-.5px">SmartBus</h2>
+      <div style="opacity:.7;font-size:.85rem">Système de gestion de transport municipal · {{ currentYear }}</div>
+    </div>
+    <div class="ms-auto">
+      <span style="background:rgba(46,184,92,.2);border:1px solid rgba(46,184,92,.5);
+                   padding:6px 16px;border-radius:20px;font-size:.82rem;color:#6fffb0">
+        ● Système opérationnel
+      </span>
+    </div>
+  </div>
+  <div class="row g-3">
+    <div class="col-6 col-md-3">
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+                  border-radius:14px;padding:18px;text-align:center">
+        <div style="font-size:2.2rem;font-weight:800;line-height:1">{{ stats.totalVehicules }}</div>
+        <div style="opacity:.7;font-size:.8rem;margin-top:4px">🚌 Véhicules</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+                  border-radius:14px;padding:18px;text-align:center">
+        <div style="font-size:2.2rem;font-weight:800;line-height:1">{{ stats.totalChauffeurs }}</div>
+        <div style="opacity:.7;font-size:.8rem;margin-top:4px">👤 Chauffeurs</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+                  border-radius:14px;padding:18px;text-align:center">
+        <div style="font-size:2.2rem;font-weight:800;line-height:1">{{ stats.totalVoyages }}</div>
+        <div style="opacity:.7;font-size:.8rem;margin-top:4px">🗺️ Voyages</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+                  border-radius:14px;padding:18px;text-align:center">
+        <div style="font-size:2.2rem;font-weight:800;line-height:1">
+          {{ stats.revenuTotal | number:'1.0-0' }}<span style="font-size:.9rem"> DT</span>
+        </div>
+        <div style="opacity:.7;font-size:.8rem;margin-top:4px">💰 Revenus</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI ROW 1 — gradient cards -->
+<div class="row g-3 mb-3">
+  <div class="col-sm-6 col-xl-3">
+    <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;
+                padding:24px;color:white;height:100%;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-20px;top:-20px;width:110px;height:110px;
+                  background:rgba(255,255,255,.12);border-radius:50%"></div>
+      <div style="font-size:2rem;margin-bottom:6px">🚌</div>
+      <div style="font-size:2.6rem;font-weight:800;line-height:1">{{ stats.totalVehicules }}</div>
+      <div style="opacity:.85;font-size:.85rem;margin:6px 0 14px">Véhicules actifs</div>
+      <div style="background:rgba(255,255,255,.25);border-radius:8px;overflow:hidden;height:5px">
+        <div [style.width.%]="stats.vehiculesDisposPct"
+             style="background:white;height:100%;border-radius:8px;transition:.8s ease"></div>
+      </div>
+      <div style="margin-top:8px;font-size:.78rem;opacity:.85">
+        {{ stats.vehiculesDispos }}/{{ stats.totalVehicules }} disponibles · {{ stats.vehiculesDisposPct }}%
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div style="background:linear-gradient(135deg,#f093fb,#f5576c);border-radius:16px;
+                padding:24px;color:white;height:100%;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-20px;top:-20px;width:110px;height:110px;
+                  background:rgba(255,255,255,.12);border-radius:50%"></div>
+      <div style="font-size:2rem;margin-bottom:6px">👤</div>
+      <div style="font-size:2.6rem;font-weight:800;line-height:1">{{ stats.totalChauffeurs }}</div>
+      <div style="opacity:.85;font-size:.85rem;margin:6px 0 14px">Chauffeurs inscrits</div>
+      <div style="background:rgba(255,255,255,.25);border-radius:8px;overflow:hidden;height:5px">
+        <div [style.width.%]="stats.chauffeurActifsPct"
+             style="background:white;height:100%;border-radius:8px;transition:.8s ease"></div>
+      </div>
+      <div style="margin-top:8px;font-size:.78rem;opacity:.85">
+        {{ stats.chauffeurActifs }} actifs · {{ stats.chauffeurActifsPct }}%
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div style="background:linear-gradient(135deg,#4facfe,#00f2fe);border-radius:16px;
+                padding:24px;color:white;height:100%;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-20px;top:-20px;width:110px;height:110px;
+                  background:rgba(255,255,255,.12);border-radius:50%"></div>
+      <div style="font-size:2rem;margin-bottom:6px">🎫</div>
+      <div style="font-size:2.6rem;font-weight:800;line-height:1">{{ stats.totalTickets }}</div>
+      <div style="opacity:.85;font-size:.85rem;margin:6px 0 14px">Tickets vendus</div>
+      <div style="background:rgba(255,255,255,.25);border-radius:12px;padding:10px 14px;font-size:.85rem">
+        💰 Revenu : <strong>{{ stats.revenuTotal | number:'1.0-0' }} DT</strong>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div style="background:linear-gradient(135deg,#43e97b,#38f9d7);border-radius:16px;
+                padding:24px;color:white;height:100%;position:relative;overflow:hidden">
+      <div style="position:absolute;right:-20px;top:-20px;width:110px;height:110px;
+                  background:rgba(255,255,255,.12);border-radius:50%"></div>
+      <div style="font-size:2rem;margin-bottom:6px">⏱️</div>
+      <div style="font-size:2.6rem;font-weight:800;line-height:1">
+        {{ stats.ponctualite }}<span style="font-size:1.4rem">%</span>
+      </div>
+      <div style="opacity:.85;font-size:.85rem;margin:6px 0 14px">Taux de ponctualité</div>
+      <div style="background:rgba(255,255,255,.25);border-radius:8px;overflow:hidden;height:5px">
+        <div [style.width.%]="stats.ponctualite"
+             style="background:white;height:100%;border-radius:8px;transition:.8s ease"></div>
+      </div>
+      <div style="margin-top:8px;font-size:.78rem;opacity:.85">
+        {{ stats.horairesAvecRetard }} retard(s) signalé(s)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI ROW 2 — light cards -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div style="background:white;border-radius:14px;padding:20px;
+                border:1px solid #e9ecef;box-shadow:0 2px 10px rgba(0,0,0,.05)">
+      <div class="d-flex align-items-center gap-3">
+        <div style="background:#fff8e1;border-radius:12px;width:50px;height:50px;
+                    display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">🛤️</div>
+        <div>
+          <div style="font-size:2rem;font-weight:800;color:#321fdb;line-height:1">{{ stats.totalLignes }}</div>
+          <div style="font-size:.78rem;color:#6c757d;margin-top:2px">Lignes actives</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div style="background:white;border-radius:14px;padding:20px;
+                border:1px solid #e9ecef;box-shadow:0 2px 10px rgba(0,0,0,.05)">
+      <div class="d-flex align-items-center gap-3">
+        <div style="background:#e3f2fd;border-radius:12px;width:50px;height:50px;
+                    display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">🏢</div>
+        <div>
+          <div style="font-size:2rem;font-weight:800;color:#1b8eb7;line-height:1">{{ stats.totalStations }}</div>
+          <div style="font-size:.78rem;color:#6c757d;margin-top:2px">Stations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div style="background:white;border-radius:14px;padding:20px;
+                border:1px solid #e9ecef;box-shadow:0 2px 10px rgba(0,0,0,.05)">
+      <div class="d-flex align-items-center gap-3">
+        <div style="background:#e8f5e9;border-radius:12px;width:50px;height:50px;
+                    display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">📅</div>
+        <div>
+          <div style="font-size:2rem;font-weight:800;color:#2eb85c;line-height:1">{{ stats.ticketsAujourdhui }}</div>
+          <div style="font-size:.78rem;color:#6c757d;margin-top:2px">Tickets aujourd'hui</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div style="background:white;border-radius:14px;padding:20px;
+                border:1px solid #e9ecef;box-shadow:0 2px 10px rgba(0,0,0,.05)">
+      <div class="d-flex align-items-center gap-3">
+        <div style="background:#fce4ec;border-radius:12px;width:50px;height:50px;
+                    display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0">🗺️</div>
+        <div>
+          <div style="font-size:2rem;font-weight:800;color:#e55353;line-height:1">{{ stats.totalVoyages }}</div>
+          <div style="font-size:.78rem;color:#6c757d;margin-top:2px">Voyages planifiés</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHART -->
+<c-card class="mb-4" style="border-radius:16px;border:1px solid #e9ecef;
+                             box-shadow:0 4px 20px rgba(0,0,0,.06);overflow:hidden">
+  <c-card-header style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white;padding:20px 24px;border:none">
+    <div class="d-flex align-items-center flex-wrap gap-3">
+      <div>
+        <h5 class="mb-0 fw-bold">📊 Activité flotte — {{ currentYear }}</h5>
+        <div style="opacity:.8;font-size:.8rem">Statistiques de transport en temps réel</div>
+      </div>
+      <div class="ms-auto">
+        <form [formGroup]="trafficRadioGroup">
+          <c-button-group role="group">
+            <input class="btn-check" formControlName="trafficRadio" type="radio" value="Day" id="dayRadio" />
+            <label (click)="setTrafficPeriod('Day')" cButton cFormCheckLabel color="light" variant="outline" for="dayRadio"
+                   style="font-size:.8rem;padding:4px 14px">Jour</label>
+            <input class="btn-check" formControlName="trafficRadio" type="radio" value="Month" id="radioMonth" />
+            <label (click)="setTrafficPeriod('Month')" cButton cFormCheckLabel color="light" variant="outline" for="radioMonth"
+                   style="font-size:.8rem;padding:4px 14px">Mois</label>
+            <input class="btn-check" formControlName="trafficRadio" type="radio" value="Year" id="radioYear" />
+            <label (click)="setTrafficPeriod('Year')" cButton cFormCheckLabel color="light" variant="outline" for="radioYear"
+                   style="font-size:.8rem;padding:4px 14px">Année</label>
+          </c-button-group>
+        </form>
+      </div>
+    </div>
+  </c-card-header>
+  <c-card-body style="padding:24px">
+    <c-chart [data]="mainChart.data" [height]="300" [options]="mainChart.options"
+             [type]="mainChart.type" (chartRef)="handleChartRef($event)">
+      Graphique principal
+    </c-chart>
+  </c-card-body>
+  <c-card-footer style="background:#f8f9fa;border-top:1px solid #e9ecef;padding:20px 24px">
+    <c-row class="text-center" [xl]="5" [lg]="4" [sm]="2" [xs]="1" [gutter]="4">
+      <c-col>
+        <div class="text-body-secondary small">Véhicules</div>
+        <strong>{{ stats.totalVehicules }} total</strong>
+        <c-progress class="mt-2" thin color="success" [value]="stats.vehiculesDisposPct" />
+      </c-col>
+      <c-col>
+        <div class="text-body-secondary small">Disponibles</div>
+        <div class="fw-semibold">{{ stats.vehiculesDispos }} ({{ stats.vehiculesDisposPct }}%)</div>
+        <c-progress class="mt-2" thin color="info" [value]="stats.vehiculesDisposPct" />
+      </c-col>
+      <c-col>
+        <div class="text-body-secondary small">Voyages</div>
+        <div class="fw-semibold">{{ stats.totalVoyages }} planifiés</div>
+        <c-progress class="mt-2" thin color="warning" [value]="Math.min(stats.totalVoyages * 4, 100)" />
+      </c-col>
+      <c-col>
+        <div class="text-body-secondary small">Chauffeurs</div>
+        <div class="fw-semibold">{{ stats.chauffeurActifs }}/{{ stats.totalChauffeurs }}</div>
+        <c-progress class="mt-2" thin color="danger" [value]="stats.chauffeurActifsPct" />
+      </c-col>
+      <c-col class="d-none d-xl-block">
+        <div class="text-body-secondary small">Ponctualité</div>
+        <div class="fw-semibold">{{ stats.ponctualite }}%</div>
+        <c-progress class="mt-2" thin [value]="stats.ponctualite" />
+      </c-col>
+    </c-row>
+  </c-card-footer>
+</c-card>
+
+<!-- ACCÈS RAPIDE -->
+<div style="background:white;border-radius:16px;border:1px solid #e9ecef;
+            box-shadow:0 4px 20px rgba(0,0,0,.06);padding:24px;margin-bottom:24px">
+  <h6 class="fw-bold mb-3" style="color:#321fdb;font-size:1rem">⚡ Accès rapide aux modules</h6>
+  <div class="row g-3">
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/vehicules" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(102,126,234,.12),rgba(118,75,162,.06));
+                    border:1px solid rgba(102,126,234,.3);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#321fdb">
+          <div style="font-size:2rem">🚌</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Véhicules</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">{{ stats.totalVehicules }} enregistrés</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/chauffeurs" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(240,147,251,.12),rgba(245,87,108,.06));
+                    border:1px solid rgba(245,87,108,.3);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#d63384">
+          <div style="font-size:2rem">👤</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Chauffeurs</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">{{ stats.totalChauffeurs }} inscrits</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/lignes" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(249,168,37,.12),rgba(249,168,37,.06));
+                    border:1px solid rgba(249,168,37,.4);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#e65c00">
+          <div style="font-size:2rem">🛤️</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Lignes</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">{{ stats.totalLignes }} actives</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/stations" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(79,172,254,.12),rgba(0,242,254,.06));
+                    border:1px solid rgba(79,172,254,.4);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#1b8eb7">
+          <div style="font-size:2rem">🏢</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Stations</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">{{ stats.totalStations }} stations</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/horaires" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(67,233,123,.12),rgba(56,249,215,.06));
+                    border:1px solid rgba(67,233,123,.4);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#2eb85c">
+          <div style="font-size:2rem">🕐</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Horaires</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">Planning journalier</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/voyages" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(229,83,83,.12),rgba(229,83,83,.06));
+                    border:1px solid rgba(229,83,83,.3);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#e55353">
+          <div style="font-size:2rem">🗺️</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Voyages</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">{{ stats.totalVoyages }} planifiés</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/voyages/alerts" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(255,230,230,.12),rgba(255,200,200,.06));
+                    border:1px solid rgba(229,83,83,.3);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#e55353">
+          <div style="font-size:2rem">🚨</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Alertes de violence</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">Voir la liste des alertes détectées</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/tickets" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(102,16,242,.12),rgba(102,16,242,.06));
+                    border:1px solid rgba(102,16,242,.3);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#6610f2">
+          <div style="font-size:2rem">🎫</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Tickets</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">{{ stats.totalTickets }} vendus</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-sm-4 col-md-3">
+      <a routerLink="/affectations" style="text-decoration:none">
+        <div style="background:linear-gradient(135deg,rgba(52,58,64,.08),rgba(52,58,64,.04));
+                    border:1px solid rgba(52,58,64,.2);border-radius:14px;padding:20px;
+                    text-align:center;transition:.25s;color:#343a40">
+          <div style="font-size:2rem">📋</div>
+          <div style="font-weight:600;font-size:.88rem;margin-top:8px">Affectations</div>
+          <div style="font-size:.75rem;opacity:.65;margin-top:2px">Planning chauffeurs</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIVITÉ CHAUFFEURS -->
+<c-card class="mb-4" style="border-radius:16px;border:1px solid #e9ecef;
+                             box-shadow:0 4px 20px rgba(0,0,0,.06);overflow:hidden">
+  <c-card-header style="background:linear-gradient(135deg,#f093fb,#f5576c);color:white;padding:20px 24px;border:none">
+    <h5 class="mb-0 fw-bold">👤 Activité des chauffeurs</h5>
+    <div style="opacity:.8;font-size:.8rem">Kilométrage et statut en temps réel</div>
+  </c-card-header>
+  <c-card-body style="padding:0">
+    @if (loadingUsers) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted small">Chargement...</p>
+      </div>
+    } @else {
+      <table [hover]="true" [responsive]="true" [striped]="true" cTable class="mb-0" align="middle">
+        <thead>
+          <tr style="background:#f8f9fa">
+            <th style="padding:14px 16px;font-weight:600;color:#6c757d;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px"></th>
+            <th style="padding:14px 16px;font-weight:600;color:#6c757d;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Chauffeur</th>
+            <th style="padding:14px 16px;font-weight:600;color:#6c757d;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;text-align:center">Localisation</th>
+            <th style="padding:14px 16px;font-weight:600;color:#6c757d;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Kilométrage</th>
+            <th style="padding:14px 16px;font-weight:600;color:#6c757d;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;text-align:center">Type</th>
+            <th style="padding:14px 16px;font-weight:600;color:#6c757d;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px">Dernière alerte</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users; track user.name) {
+            <tr>
+              <td style="padding:14px 16px">
+                <c-avatar size="md" src="{{ user.avatar }}" status="{{ user.status }}" />
+              </td>
+              <td style="padding:14px 16px">
+                <div class="fw-semibold">{{ user.name }}</div>
+                <div class="small text-muted">{{ user.state }} · {{ user.registered }}</div>
+              </td>
+              <td style="padding:14px 16px;text-align:center">
+                <span style="background:#e8f5e9;color:#2e7d32;padding:4px 12px;
+                             border-radius:20px;font-size:.78rem;font-weight:500">🇹🇳 Tunisie</span>
+              </td>
+              <td style="padding:14px 16px;min-width:160px">
+                <div class="d-flex justify-content-between mb-1">
+                  <small class="fw-semibold">{{ user.usage }}%</small>
+                  <small class="text-muted">{{ user.period }}</small>
+                </div>
+                <c-progress thin [value]="user.usage" color="{{ user.color }}" />
+              </td>
+              <td style="padding:14px 16px;text-align:center">
+                <span style="background:#e3f2fd;color:#1565c0;padding:4px 12px;
+                             border-radius:20px;font-size:.78rem;font-weight:500">{{ user.payment }}</span>
+              </td>
+              <td style="padding:14px 16px">
+                <div class="small text-muted">Dernière alerte</div>
+                <div class="fw-semibold small">{{ user.activity }}</div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </c-card-body>
+</c-card>

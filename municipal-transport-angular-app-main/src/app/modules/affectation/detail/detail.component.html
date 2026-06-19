@@ -1,0 +1,144 @@
+<c-card class="mb-4">
+  <c-card-header class="d-flex align-items-center gap-2"
+    style="background:linear-gradient(135deg,#321fdb,#6f42c1);color:white">
+    <span style="font-size:1.3rem">📋</span>
+    <strong class="fs-5 mb-0">Détails de l'affectation</strong>
+    @if (affectation) {
+      <c-badge color="light" class="ms-auto text-dark">ID #{{ affectation.id }}</c-badge>
+    }
+  </c-card-header>
+
+  <c-card-body>
+    @if (loading) {
+      <div class="text-center py-4">
+        <div class="spinner-border text-primary"></div>
+      </div>
+    } @else if (affectation) {
+
+      <!-- Statut banner -->
+      <div class="d-flex align-items-center justify-content-between p-3 rounded mb-4"
+        style="background:linear-gradient(90deg,#321fdb11,#6f42c111);border-left:4px solid #6f42c1">
+        <div>
+          <div class="text-muted small fw-semibold text-uppercase">Statut de l'affectation</div>
+          <c-badge [color]="statutColor(affectation.statut)" style="font-size:1rem;padding:.4rem .9rem">
+            {{ statutLabel }}
+          </c-badge>
+        </div>
+        <div class="text-end">
+          <div class="text-muted small fw-semibold">Durée totale</div>
+          <div class="fs-4 fw-black" style="color:#6f42c1">{{ duree() }}</div>
+        </div>
+      </div>
+
+      <!-- 3 entités principales -->
+      <div class="row g-3 mb-3">
+
+        <!-- Chauffeur -->
+        <div class="col-md-4">
+          <div class="p-3 rounded h-100" style="background:#f8f9fa;border-left:4px solid #321fdb">
+            <small class="text-muted text-uppercase fw-semibold d-block mb-2">👤 Chauffeur</small>
+            @if (chauffeur) {
+              <div class="d-flex align-items-center gap-2">
+                <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+                     style="width:40px;height:40px;background:linear-gradient(135deg,#321fdb,#1b8eb7);font-size:.85rem">
+                  {{ (chauffeur.nom?.[0] ?? '') }}{{ (chauffeur.prenom?.[0] ?? '') }}
+                </div>
+                <div>
+                  <div class="fw-bold">{{ chauffeur.nom }} {{ chauffeur.prenom }}</div>
+                  <small class="text-muted">{{ chauffeur.matricule }}</small><br>
+                  <c-badge color="info" shape="rounded-pill" class="mt-1">🪪 {{ chauffeur.permis }}</c-badge>
+                </div>
+              </div>
+              <div class="mt-2">
+                <a [routerLink]="['/chauffeurs/detail', chauffeur.id]" class="btn btn-sm btn-outline-primary w-100">
+                  Voir le chauffeur →
+                </a>
+              </div>
+            } @else {
+              <span class="text-muted">ID #{{ affectation.chauffeurId }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Véhicule -->
+        <div class="col-md-4">
+          <div class="p-3 rounded h-100" style="background:#f8f9fa;border-left:4px solid #2eb85c">
+            <small class="text-muted text-uppercase fw-semibold d-block mb-2">🚌 Véhicule</small>
+            @if (vehicule) {
+              <div class="fw-bold fs-6">{{ vehicule.marque }} {{ vehicule.modele }}</div>
+              <small class="text-muted d-block">{{ vehicule.matriculeFourni }}</small>
+              <small class="text-muted d-block">{{ vehicule.typeVehicule }} · {{ vehicule.carburant }}</small>
+              <c-badge [color]="vehicule.vehiculeDispo ? 'success' : 'warning'" shape="rounded-pill" class="mt-1">
+                {{ vehicule.etat }}
+              </c-badge>
+              <div class="mt-2">
+                <a [routerLink]="['/vehicules/detail', vehicule.id]" class="btn btn-sm btn-outline-success w-100">
+                  Voir le véhicule →
+                </a>
+              </div>
+            } @else {
+              <span class="text-muted">ID #{{ affectation.vehiculeId }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Ligne -->
+        <div class="col-md-4">
+          <div class="p-3 rounded h-100" style="background:#f8f9fa;border-left:4px solid #1b8eb7">
+            <small class="text-muted text-uppercase fw-semibold d-block mb-2">🛤️ Ligne</small>
+            @if (ligne) {
+              <div class="fw-bold fs-5">Ligne {{ ligne.numero }}</div>
+              <div class="text-muted">📍 {{ ligne.destination }}</div>
+              @if (ligne.stations && ligne.stations.length > 0) {
+                <small class="text-muted">{{ ligne.stations.length }} station(s)</small>
+              }
+              <div class="mt-2">
+                <a [routerLink]="['/lignes/detail', ligne.id]" class="btn btn-sm btn-outline-info w-100">
+                  Voir la ligne →
+                </a>
+              </div>
+            } @else {
+              <span class="text-muted">ID #{{ affectation.ligneId }}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Période -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #f9a825">
+            <small class="text-muted text-uppercase fw-semibold d-block">📅 Date de début</small>
+            <div class="fs-5 fw-bold mt-1">{{ affectation.dateDebut | date:'dd/MM/yyyy' }}</div>
+            <div class="text-muted">{{ affectation.dateDebut | date:'HH:mm' }}</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #e55353">
+            <small class="text-muted text-uppercase fw-semibold d-block">📅 Date de fin</small>
+            <div class="fs-5 fw-bold mt-1">{{ affectation.dateFin | date:'dd/MM/yyyy' }}</div>
+            <div class="text-muted">{{ affectation.dateFin | date:'HH:mm' }}</div>
+          </div>
+        </div>
+      </div>
+
+      @if (affectation.remarque) {
+        <div class="p-3 rounded mb-3" style="background:#f8f9fa;border-left:4px solid #6c757d">
+          <small class="text-muted text-uppercase fw-semibold d-block">💬 Remarque</small>
+          <div class="mt-1">{{ affectation.remarque }}</div>
+        </div>
+      }
+
+      @if (affectation.dateCreation) {
+        <div class="text-end text-muted small mb-3">
+          Créée le {{ affectation.dateCreation | date:'dd/MM/yyyy HH:mm' }}
+        </div>
+      }
+
+      <div class="d-flex justify-content-end gap-2 mt-2">
+        <button cButton color="secondary" variant="outline" (click)="back()">← Retour</button>
+        <button cButton color="warning" variant="outline" [routerLink]="['/affectations/edit', affectation.id]">✏️ Modifier</button>
+      </div>
+    }
+  </c-card-body>
+</c-card>

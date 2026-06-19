@@ -1,0 +1,119 @@
+<c-card class="mb-4">
+  <c-card-header class="d-flex align-items-center gap-2" style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white">
+    <span style="font-size:1.3rem">🗺️</span>
+    <strong class="fs-5 mb-0">Détails du voyage</strong>
+    <c-badge color="light" class="ms-auto text-dark" *ngIf="voyage">ID #{{ voyage.id }}</c-badge>
+  </c-card-header>
+
+  <c-card-body>
+    <div *ngIf="loading" class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+
+    <div *ngIf="!loading && voyage">
+      <!-- Infos principales -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #321fdb">
+            <small class="text-muted text-uppercase fw-semibold">Destination</small>
+            <div class="fs-5 fw-bold mt-1">📍 {{ voyage.ligne?.destination }}</div>
+            <div class="text-muted small">Ligne {{ voyage.ligne?.numero }}</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #f9a825">
+            <small class="text-muted text-uppercase fw-semibold">Date</small>
+            <div class="fs-5 fw-bold mt-1">📅 {{ voyage.dateVoyage | date:'dd/MM/yyyy' }}</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #2eb85c">
+            <small class="text-muted text-uppercase fw-semibold">🪑 Places disponibles</small>
+            <div class="mt-2">
+              <c-badge [color]="getPlacesColor(voyage.nombrePlacesDisponible)" style="font-size:1rem;padding:.4rem .8rem">
+                {{ voyage.nombrePlacesDisponible === 0 ? '🚫 Complet' : voyage.nombrePlacesDisponible + ' disponibles' }}
+              </c-badge>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #6f42c1">
+            <small class="text-muted text-uppercase fw-semibold">Prix unitaire</small>
+            <div class="fs-4 fw-bold mt-1 text-success">{{ voyage.prix }} DT</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenu potentiel -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f0fff4;border-left:4px solid #059669">
+            <small class="text-muted text-uppercase fw-semibold">💰 Revenu potentiel</small>
+            <div class="fs-3 fw-black text-success mt-1">{{ revenuPotentiel | number:'1.0-0' }} DT</div>
+            <div class="small text-muted">{{ voyage.prix }} DT × {{ voyage.nombrePlacesDisponible }} places</div>
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="voyage.horaire">
+          <div class="p-3 rounded" style="background:#f5f0ff;border-left:4px solid #6f42c1">
+            <small class="text-muted text-uppercase fw-semibold">⏳ Durée estimée</small>
+            <div class="fs-3 fw-black mt-1" style="color:#6f42c1">{{ duree(voyage.horaire.horaire_depart, voyage.horaire.horaire_arrive) }}</div>
+            <div class="small text-muted">De {{ voyage.horaire.horaire_depart | slice:0:5 }} à {{ voyage.horaire.horaire_arrive | slice:0:5 }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Horaire -->
+      <div class="row g-3 mb-4">
+        <div class="col-12" *ngIf="voyage.horaire">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #321fdb">
+            <div class="d-flex justify-content-between align-items-start">
+              <small class="text-muted text-uppercase fw-semibold">🕐 Horaire</small>
+              <c-badge [color]="(voyage.horaire.retard_estime ?? 0) > 0 ? 'danger' : 'success'" shape="rounded-pill">
+                {{ (voyage.horaire.retard_estime ?? 0) > 0 ? ('⚠️ +' + voyage.horaire.retard_estime + ' min de retard') : '✅ À l\'heure' }}
+              </c-badge>
+            </div>
+            <div class="d-flex gap-4 mt-2 flex-wrap">
+              <div>
+                <span class="text-muted small">Départ</span>
+                <div class="fs-4 fw-bold text-success">🟢 {{ voyage.horaire.horaire_depart | slice:0:5 }}</div>
+              </div>
+              <div class="align-self-center fs-3 text-muted">→</div>
+              <div>
+                <span class="text-muted small">Arrivée</span>
+                <div class="fs-4 fw-bold text-danger">🔴 {{ voyage.horaire.horaire_arrive | slice:0:5 }}</div>
+              </div>
+              <div class="ms-auto">
+                <span class="text-muted small">Date horaire</span>
+                <div class="fw-semibold">{{ voyage.horaire.date_voyage | date:'dd/MM/yyyy' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Véhicule & Chauffeur -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #2eb85c">
+            <small class="text-muted text-uppercase fw-semibold">🚌 Véhicule</small>
+            <div class="fs-5 fw-bold mt-1">{{ voyage.vehicule?.marque }} {{ voyage.vehicule?.modele }}</div>
+            <div class="text-muted">{{ voyage.vehicule?.matriculeFourni }} &bull; {{ voyage.vehicule?.typeVehicule }}</div>
+            <div class="text-muted small">⛽ {{ voyage.vehicule?.carburant }}</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #1b8eb7">
+            <small class="text-muted text-uppercase fw-semibold">👤 Chauffeur</small>
+            <div class="fs-5 fw-bold mt-1">{{ voyage.chauffeur?.nom }} {{ voyage.chauffeur?.prenom }}</div>
+            <div class="text-muted">Matricule : {{ voyage.chauffeur?.matricule }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button cButton color="secondary" variant="outline" (click)="goBack()">← Retour</button>
+        <button cButton color="danger" variant="outline" [routerLink]="['/voyages','alerts','add']" [queryParams]="{voyageId: voyage?.id}">🚨 Signaler</button>
+        <button cButton color="warning" variant="outline" [routerLink]="['/voyages/edit', voyage.id]">✏️ Modifier</button>
+        <button cButton color="success" [routerLink]="['/voyages/payment', voyage.id]">💳 Payer</button>
+      </div>
+    </div>
+  </c-card-body>
+</c-card>

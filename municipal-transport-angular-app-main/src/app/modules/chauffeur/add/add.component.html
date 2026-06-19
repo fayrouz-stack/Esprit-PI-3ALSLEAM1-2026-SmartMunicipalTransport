@@ -1,0 +1,67 @@
+<c-card class="mb-4" style="max-width:700px;margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2" style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white">
+    <span style="font-size:1.3rem">👤</span>
+    <strong class="fs-5 mb-0">Ajouter un chauffeur</strong>
+  </c-card-header>
+
+  <c-card-body>
+    <form #form="ngForm" (ngSubmit)="save(form)" novalidate>
+      <div class="row g-3">
+
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">CIN *</label>
+          <input cFormControl name="cin" [(ngModel)]="chauffeur.cin" required pattern="^[012][0-9]{7}$"
+                 [class.is-invalid]="form.submitted && form.controls['cin']?.invalid">
+          <div class="invalid-feedback">CIN invalide (8 chiffres, commence par 0/1/2)</div>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Nom *</label>
+          <input cFormControl name="nom" [(ngModel)]="chauffeur.nom" required pattern="^[A-Za-zÀ-ÿ\s]+$"
+                 [class.is-invalid]="form.submitted && form.controls['nom']?.invalid">
+          <div class="invalid-feedback">Lettres seulement</div>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Prénom *</label>
+          <input cFormControl name="prenom" [(ngModel)]="chauffeur.prenom" required pattern="^[A-Za-zÀ-ÿ\s]+$"
+                 [class.is-invalid]="form.submitted && form.controls['prenom']?.invalid">
+          <div class="invalid-feedback">Lettres seulement</div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">📞 Téléphone *</label>
+          <input cFormControl name="telephone" [(ngModel)]="chauffeur.telephone" required pattern="^[2459][0-9]{7}$"
+                 [class.is-invalid]="form.submitted && form.controls['telephone']?.invalid">
+          <div class="invalid-feedback">8 chiffres (commence par 2/4/5/9)</div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">📧 Email *</label>
+          <input cFormControl name="email" type="email" [(ngModel)]="chauffeur.email" required
+                 [class.is-invalid]="form.submitted && form.controls['email']?.invalid">
+          <div class="invalid-feedback">Email invalide</div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">🎟️ Permis *</label>
+          <select class="form-select" name="permis" [(ngModel)]="chauffeur.permis" required>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button cButton color="secondary" type="button" routerLink="/chauffeurs">Annuler</button>
+        <button cButton color="primary" type="submit" [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ loading ? 'Enregistrement...' : '✅ Enregistrer' }}
+        </button>
+      </div>
+    </form>
+  </c-card-body>
+</c-card>

@@ -1,0 +1,75 @@
+<div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
+  <c-container breakpoint="md">
+    <c-row class="justify-content-center">
+      <c-col lg="8" xl="6">
+        <c-card class="p-4">
+          <c-card-body>
+            <form cForm (ngSubmit)="login()">
+
+              <!-- Header -->
+              <div class="text-center mb-4">
+                <h2 style="color:#321fdb">🚌 SmartBus</h2>
+                <p class="text-body-secondary mb-0">Connectez-vous à votre espace</p>
+              </div>
+
+              <!-- Alerte erreur -->
+              @if (errorMsg) {
+                <div class="alert alert-danger py-2 mb-3">
+                  ⚠️ {{ errorMsg }}
+                </div>
+              }
+
+              <!-- Email -->
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilUser"></svg>
+                </span>
+                <input cFormControl
+                  type="email"
+                  placeholder="Email"
+                  autocomplete="username"
+                  [(ngModel)]="email"
+                  name="email"
+                  required />
+              </c-input-group>
+
+              <!-- Mot de passe -->
+              <c-input-group class="mb-4">
+                <span cInputGroupText>
+                  <svg cIcon name="cilLockLocked"></svg>
+                </span>
+                <input cFormControl
+                  type="password"
+                  placeholder="Mot de passe"
+                  autocomplete="current-password"
+                  [(ngModel)]="password"
+                  name="password"
+                  required />
+              </c-input-group>
+
+              <!-- Bouton -->
+              <div class="d-grid">
+                <button cButton color="primary" type="submit" [disabled]="loading || !email || !password">
+                  @if (loading) {
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    Connexion...
+                  } @else {
+                    Se connecter
+                  }
+                </button>
+              </div>
+
+              <!-- Comptes par défaut (aide au développement) -->
+              <div class="mt-4 p-3 rounded" style="background:#f8f5ff; font-size:.8rem">
+                <p class="mb-1 fw-semibold text-muted">Comptes de test :</p>
+                <code>admin&#64;transport.tn / admin123</code><br>
+                <code>gestionnaire&#64;transport.tn / gest123</code>
+              </div>
+
+            </form>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+  </c-container>
+</div>

@@ -1,0 +1,46 @@
+<c-card class="mb-4">
+  <c-card-header>
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Planning hebdomadaire</h5>
+      <div>
+        <button cButton color="secondary" class="me-2" (click)="previousWeek()">‹ Semaine préc.</button>
+        <button cButton color="primary" class="me-2" (click)="currentWeek()">Aujourd'hui</button>
+        <button cButton color="secondary" (click)="nextWeek()">Semaine suiv. ›</button>
+      </div>
+    </div>
+  </c-card-header>
+  <c-card-body>
+    @if (loading) {
+      <div class="text-center"><div class="spinner-border"></div></div>
+    } @else {
+      <div class="row">
+        @for (g of groups; track g.date) {
+          <div class="col-md-6 col-lg-4 mb-3">
+            <div class="card h-100">
+              <div class="card-header fw-semibold">{{ g.label }}</div>
+              <div class="card-body p-2">
+                @if (g.items.length === 0) {
+                  <small class="text-muted">Aucune affectation</small>
+                } @else {
+                  @for (a of g.items; track a.id) {
+                    <div class="border rounded p-2 mb-2 small">
+                      <div class="d-flex justify-content-between">
+                        <strong>{{ chauffeursMap[a.chauffeurId] || ('#' + a.chauffeurId) }}</strong>
+                        <c-badge [color]="statutColor(a.statut)">{{ a.statut }}</c-badge>
+                      </div>
+                      <div>🚌 {{ vehiculesMap[a.vehiculeId] || ('Véh #' + a.vehiculeId) }}</div>
+                      <div>📍 {{ lignesMap[a.ligneId] || ('Ligne #' + a.ligneId) }}</div>
+                      <div class="text-muted">
+                        {{ a.dateDebut | date:'shortTime' }} → {{ a.dateFin | date:'shortTime' }}
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </c-card-body>
+</c-card>

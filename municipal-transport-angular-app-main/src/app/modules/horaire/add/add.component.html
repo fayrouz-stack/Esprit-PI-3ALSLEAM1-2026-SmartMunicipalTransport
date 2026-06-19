@@ -1,0 +1,93 @@
+<c-card class="mb-4" style="max-width:650px; margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2" style="background: linear-gradient(135deg,#321fdb,#6f42c1); color:white">
+    <span style="font-size:1.3rem">🕐</span>
+    <strong class="fs-5 mb-0">Ajouter un horaire</strong>
+  </c-card-header>
+
+  <c-card-body>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <!-- Ligne -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">🛤️ Ligne</label>
+        <select cSelect formControlName="ligne" class="form-select">
+          <option [value]="null">-- Aucune ligne --</option>
+          <option *ngFor="let l of lignes" [value]="l.id">{{ l.numero }} — {{ l.destination }}</option>
+        </select>
+      </div>
+
+      <!-- Stations -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">🟢 Station de départ</label>
+          <select cSelect formControlName="stationDepart" class="form-select">
+            <option [value]="null">-- Aucune --</option>
+            <option *ngFor="let s of stations" [value]="s.id">{{ s.nom }} ({{ s.ville }})</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">🔴 Station d'arrivée</label>
+          <select cSelect formControlName="stationArrivee" class="form-select">
+            <option [value]="null">-- Aucune --</option>
+            <option *ngFor="let s of stations" [value]="s.id">{{ s.nom }} ({{ s.ville }})</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="date_voyage">📅 Date du voyage *</label>
+        <input
+          cFormControl
+          id="date_voyage"
+          type="date"
+          formControlName="date_voyage"
+          [class.is-invalid]="form.get('date_voyage')?.invalid && form.get('date_voyage')?.touched">
+        <div class="invalid-feedback">La date est requise</div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-semibold" for="horaire_depart">⏰ Heure de départ *</label>
+          <input
+            cFormControl
+            id="horaire_depart"
+            type="time"
+            formControlName="horaire_depart"
+            [class.is-invalid]="form.get('horaire_depart')?.invalid && form.get('horaire_depart')?.touched">
+          <div class="invalid-feedback">Heure de départ requise</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold" for="horaire_arrive">🏁 Heure d'arrivée *</label>
+          <input
+            cFormControl
+            id="horaire_arrive"
+            type="time"
+            formControlName="horaire_arrive"
+            [class.is-invalid]="form.get('horaire_arrive')?.invalid && form.get('horaire_arrive')?.touched">
+          <div class="invalid-feedback">Heure d'arrivée requise</div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold" for="retard_estime">⏱️ Retard estimé (minutes)</label>
+        <input
+          cFormControl
+          id="retard_estime"
+          type="number"
+          formControlName="retard_estime"
+          min="0"
+          placeholder="0">
+        <div class="form-text">Laisser 0 si le voyage est à l'heure</div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button cButton color="secondary" type="button" routerLink="/horaires/list">Annuler</button>
+        <button cButton color="primary" type="submit" [disabled]="submitting || form.invalid">
+          <span *ngIf="submitting" class="spinner-border spinner-border-sm me-2"></span>
+          {{ submitting ? 'Enregistrement...' : '✅ Enregistrer' }}
+        </button>
+      </div>
+
+    </form>
+  </c-card-body>
+</c-card>

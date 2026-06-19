@@ -1,0 +1,63 @@
+<div class="card">
+  <div class="card-body">
+    <h4 class="card-title mb-3">Détection de violence par caméra</h4>
+
+    <form [formGroup]="form">
+      <div class="mb-3">
+        <label class="form-label">Voyage concerné</label>
+        <select class="form-select" formControlName="voyageId">
+          <option [ngValue]="null">Sélectionnez un voyage</option>
+          <option *ngFor="let voyage of voyages" [ngValue]="voyage.id">
+            {{ voyage.id }} - {{ voyage.ligne.numero }} → {{ voyage.ligne.destination }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Message d'alerte</label>
+        <textarea class="form-control" rows="3" formControlName="summary"></textarea>
+      </div>
+    </form>
+
+    <div class="d-flex gap-2 mb-3">
+      <button type="button" class="btn btn-primary" (click)="startCamera()" [disabled]="cameraReady">Démarrer la caméra</button>
+      <button type="button" class="btn btn-warning" (click)="detectIncident()" [disabled]="!cameraReady || isSubmitting">
+        {{ monitoringActive ? 'Arrêter l\'analyse' : 'Analyser' }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="stopCamera()" [disabled]="!cameraReady">Arrêter</button>
+    </div>
+
+    <div *ngIf="cameraError" class="alert alert-danger">{{ cameraError }}</div>
+    <div *ngIf="detectionMessage" class="alert alert-info">{{ detectionMessage }}</div>
+    <div *ngIf="monitoringMessage" class="alert alert-secondary">{{ monitoringMessage }}</div>
+    <div *ngIf="alertCreated" class="alert alert-success d-flex justify-content-between align-items-center">
+      <span>Alerte enregistrée avec succès.</span>
+      <a class="btn btn-sm btn-outline-light" routerLink="/voyages/alerts">Voir les alertes</a>
+    </div>
+
+    <div class="mb-3">
+      <video #preview class="w-100 border rounded" autoplay muted playsinline [hidden]="!cameraReady"></video>
+    </div>
+    <canvas #snapshotCanvas hidden></canvas>
+
+    <div *ngIf="!cameraReady" class="text-muted small">Démarrez la caméra pour lancer l'analyse en direct.</div>
+  </div>
+</div>
+
+<div *ngIf="popupVisible" class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(0, 0, 0, 0.55); z-index: 2100;">
+  <div class="card" style="max-width: 520px; width: 100%;">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>{{ popupTitle }}</div>
+      <button type="button" class="btn-close" aria-label="Fermer" (click)="popupVisible = false"></button>
+    </div>
+    <div class="card-body">
+      <p class="mb-3">Une alerte caméra a été déclenchée pour le voyage sélectionné.</p>
+      <div *ngIf="popupImage" class="mb-3">
+        <img [src]="popupImage" class="img-fluid rounded" alt="Capture alerte violence" />
+      </div>
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-secondary" (click)="popupVisible = false">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

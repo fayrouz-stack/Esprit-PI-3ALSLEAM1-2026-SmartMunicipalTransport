@@ -1,0 +1,169 @@
+<div *ngIf="!ligne" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="ligne">
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#321fdb,#1b8eb7);border-radius:16px;
+              padding:24px 28px;color:white;margin-bottom:20px;position:relative;overflow:hidden">
+    <div style="position:absolute;right:-30px;top:-30px;width:120px;height:120px;
+                background:rgba(255,255,255,.1);border-radius:50%"></div>
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <div style="font-size:2.5rem">🛤️</div>
+      <div>
+        <h4 class="mb-0 fw-bold">Ligne {{ ligne.numero }}</h4>
+        <div style="opacity:.85">📍 {{ ligne.destination }}</div>
+      </div>
+      <div class="ms-auto d-flex gap-2">
+        <c-badge color="light" style="color:#321fdb;font-size:.9rem">ID #{{ ligne.id }}</c-badge>
+        <c-badge color="warning" style="font-size:.9rem">{{ (ligne.stations ?? []).length }} arrêts</c-badge>
+        <c-badge color="info" style="font-size:.9rem">{{ horaires.length }} horaires</c-badge>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-3" style="border-bottom:2px solid #e9ecef">
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab==='info'" (click)="activeTab='info'"
+              style="font-weight:600">ℹ️ Informations</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab==='stations'" (click)="activeTab='stations'"
+              style="font-weight:600">🏢 Arrêts <c-badge color="primary" shape="rounded-pill">{{ (ligne.stations ?? []).length }}</c-badge></button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" [class.active]="activeTab==='horaires'" (click)="activeTab='horaires'"
+              style="font-weight:600">🕐 Horaires <c-badge color="primary" shape="rounded-pill">{{ horaires.length }}</c-badge></button>
+    </li>
+  </ul>
+
+  <!-- TAB: Info -->
+  <div *ngIf="activeTab === 'info'">
+    <c-card>
+      <c-card-body>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #321fdb">
+              <small class="text-muted text-uppercase fw-semibold">Numéro de ligne</small>
+              <div class="fs-4 fw-bold text-primary mt-1">🚌 {{ ligne.numero }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #1b8eb7">
+              <small class="text-muted text-uppercase fw-semibold">Destination</small>
+              <div class="fs-5 mt-1">📍 {{ ligne.destination }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #2eb85c">
+              <small class="text-muted text-uppercase fw-semibold">Arrêts configurés</small>
+              <div class="fs-4 fw-bold text-success mt-1">🏢 {{ (ligne.stations ?? []).length }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #f9a825">
+              <small class="text-muted text-uppercase fw-semibold">Horaires planifiés</small>
+              <div class="fs-4 fw-bold text-warning mt-1">🕐 {{ horaires.length }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-2 mt-4">
+          <button cButton color="secondary" variant="outline" (click)="back()">← Retour</button>
+          <button cButton color="warning" variant="outline" [routerLink]="['/lignes/edit', ligne.id]">✏️ Modifier</button>
+        </div>
+      </c-card-body>
+    </c-card>
+  </div>
+
+  <!-- TAB: Stations -->
+  <div *ngIf="activeTab === 'stations'">
+    <c-card>
+      <c-card-header class="d-flex align-items-center justify-content-between">
+        <strong>🏢 Arrêts de la ligne {{ ligne.numero }}</strong>
+      </c-card-header>
+      <c-card-body>
+        <!-- Add station -->
+        <div class="d-flex gap-2 mb-4">
+          <select class="form-select" [(ngModel)]="selectedStationId" style="max-width:300px">
+            <option [ngValue]="null">-- Ajouter un arrêt --</option>
+            <option *ngFor="let s of availableStations" [ngValue]="s.id">{{ s.nom }} ({{ s.ville }})</option>
+          </select>
+          <button cButton color="success" size="sm" [disabled]="!selectedStationId || addingStation" (click)="addStation()">
+            <span *ngIf="addingStation" class="spinner-border spinner-border-sm me-1"></span>
+            + Ajouter
+          </button>
+        </div>
+
+        <!-- Stations list -->
+        <div *ngIf="(ligne.stations ?? []).length === 0" class="text-center py-4">
+          <div style="font-size:2.5rem">🏢</div>
+          <p class="text-muted mt-2">Aucun arrêt configuré pour cette ligne</p>
+        </div>
+
+        <div class="row g-2">
+          <div class="col-md-6" *ngFor="let s of ligne.stations; let i = index">
+            <div class="d-flex align-items-center gap-3 p-3 rounded"
+                 style="background:#f8f9fa;border:1px solid #e9ecef">
+              <div style="background:#321fdb;color:white;border-radius:50%;width:32px;height:32px;
+                          display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0">
+                {{ i + 1 }}
+              </div>
+              <div class="flex-grow-1">
+                <div class="fw-semibold">{{ s.nom }}</div>
+                <div class="small text-muted">📍 {{ s.adresse }}, {{ s.ville }}</div>
+              </div>
+              <button cButton color="danger" size="sm" variant="ghost" (click)="removeStation(s.id!)" title="Retirer">🗑️</button>
+            </div>
+          </div>
+        </div>
+      </c-card-body>
+    </c-card>
+  </div>
+
+  <!-- TAB: Horaires -->
+  <div *ngIf="activeTab === 'horaires'">
+    <c-card>
+      <c-card-header class="d-flex align-items-center justify-content-between">
+        <strong>🕐 Horaires de la ligne {{ ligne.numero }}</strong>
+        <button cButton color="primary" size="sm" routerLink="/horaires/add">+ Ajouter</button>
+      </c-card-header>
+      <c-card-body>
+        <div *ngIf="horaires.length === 0" class="text-center py-4">
+          <div style="font-size:2.5rem">🕐</div>
+          <p class="text-muted mt-2">Aucun horaire pour cette ligne</p>
+        </div>
+        <table *ngIf="horaires.length > 0" cTable hover striped responsive>
+          <thead cTableHead color="light">
+            <tr>
+              <th>📅 Date</th>
+              <th>🟢 Départ</th>
+              <th>🔴 Arrivée</th>
+              <th>Arrêts</th>
+              <th>⏱️ Retard</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let h of horaires">
+              <td class="fw-semibold">{{ h.date_voyage | date:'dd/MM/yyyy' }}</td>
+              <td class="text-success fw-semibold">{{ formatTime(h.horaire_depart) }}</td>
+              <td class="text-danger fw-semibold">{{ formatTime(h.horaire_arrive) }}</td>
+              <td>
+                <span class="small">{{ h.stationDepart?.nom ?? '?' }} → {{ h.stationArrivee?.nom ?? '?' }}</span>
+              </td>
+              <td>
+                <c-badge [color]="(h.retard_estime ?? 0) > 0 ? 'danger' : 'success'" shape="rounded-pill">
+                  {{ (h.retard_estime ?? 0) > 0 ? (h.retard_estime + ' min') : 'À l\'heure' }}
+                </c-badge>
+              </td>
+              <td class="text-end">
+                <button cButton color="warning" size="sm" variant="outline" [routerLink]="['/horaires/edit', h.id]">✏️</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </div>
+</div>

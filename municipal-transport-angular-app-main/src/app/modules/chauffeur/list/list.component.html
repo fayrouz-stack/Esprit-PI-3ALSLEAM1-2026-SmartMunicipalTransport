@@ -1,0 +1,152 @@
+<c-card class="mb-4">
+  <c-card-header class="d-flex align-items-center justify-content-between"
+                 style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white;padding:1rem 1.25rem">
+    <div class="d-flex align-items-center gap-2">
+      <span style="font-size:1.4rem">👤</span>
+      <strong class="fs-5 mb-0">Gestion des chauffeurs</strong>
+      <c-badge color="light" class="text-dark ms-1" shape="rounded-pill">{{ totalItems }}</c-badge>
+    </div>
+    <button cButton color="light" size="sm" routerLink="/chauffeurs/add"
+            style="color:#321fdb;font-weight:600">+ Ajouter</button>
+  </c-card-header>
+
+  <c-card-body>
+
+    <!-- KPI cards -->
+    @if (!loading && chauffeurs.length > 0) {
+      <div class="row g-2 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="p-3 rounded text-center" style="background:linear-gradient(135deg,#321fdb22,#1b8eb722);border-left:4px solid #321fdb">
+            <div class="fs-2 fw-black text-primary">{{ stats.total }}</div>
+            <small class="text-muted fw-semibold">👤 Total</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 rounded text-center" style="background:#d1fae5;border-left:4px solid #059669">
+            <div class="fs-2 fw-black text-success">{{ stats.enService }}</div>
+            <small class="text-muted fw-semibold">🟢 En service aujourd'hui</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 rounded text-center" style="background:#fee2e2;border-left:4px solid #dc2626">
+            <div class="fs-2 fw-black text-danger">{{ stats.sansConges }}</div>
+            <small class="text-muted fw-semibold">🚫 Sans congés</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 rounded text-center" style="background:#fef3c7;border-left:4px solid #d97706">
+            <div class="fs-2 fw-black text-warning">{{ stats.totalConges }}</div>
+            <small class="text-muted fw-semibold">🏖️ Jours congés disponibles</small>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Filtres -->
+    <div class="row mb-3 g-2 align-items-end">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text">🔍</span>
+          <input cFormControl type="text" placeholder="CIN, nom, prénom, matricule, téléphone..."
+                 [(ngModel)]="searchTerm" (input)="applyFilters()">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <select cSelect [(ngModel)]="filterPermis" (change)="applyFilters()">
+          <option value="">Tous les permis</option>
+          <option *ngFor="let p of permisTypes" [value]="p">🪪 {{ p }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button cButton color="secondary" variant="outline" class="w-100" (click)="resetFilters()">↺ Reset</button>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>👤 Chauffeur</th>
+            <th>🪪 CIN</th>
+            <th>🚗 Permis</th>
+            <th>📞 Contact</th>
+            <th>🏖️ Congés</th>
+            <th>💼 Jours trav.</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (loading) {
+            <tr>
+              <td colspan="7" class="text-center py-5">
+                <div class="spinner-border text-primary spinner-border-sm me-2"></div>
+                Chargement des chauffeurs...
+              </td>
+            </tr>
+          } @else {
+            @for (chauffeur of paginatedChauffeurs; track chauffeur.id) {
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white flex-shrink-0"
+                         style="width:38px;height:38px;background:linear-gradient(135deg,#321fdb,#1b8eb7);font-size:.75rem">
+                      {{ (chauffeur.nom?.[0] ?? '?') }}{{ (chauffeur.prenom?.[0] ?? '') }}
+                    </div>
+                    <div>
+                      <div class="fw-semibold">{{ chauffeur.nom }} {{ chauffeur.prenom }}</div>
+                      <code class="small text-muted">{{ chauffeur.matricule }}</code>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-muted small">{{ chauffeur.cin }}</td>
+                <td>
+                  <c-badge color="info" shape="rounded-pill" style="font-size:.8rem">🪪 {{ chauffeur.permis }}</c-badge>
+                </td>
+                <td>
+                  <div class="small">📞 {{ chauffeur.telephone }}</div>
+                  <div class="small text-muted">{{ chauffeur.email }}</div>
+                </td>
+                <td>
+                  <c-badge [color]="congesColor(chauffeur.holidayRemaining)" shape="rounded-pill">
+                    {{ chauffeur.holidayRemaining ?? 0 }} j
+                  </c-badge>
+                </td>
+                <td class="fw-semibold">{{ chauffeur.countWorkDays ?? 0 }} j</td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-info me-1" [routerLink]="['/chauffeurs', chauffeur.id]" title="Détails">👁</button>
+                  <button class="btn btn-sm btn-outline-warning me-1" [routerLink]="['/chauffeurs/edit', chauffeur.id]" title="Modifier">✏️</button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="deleteChauffeur(chauffeur.id!)" title="Supprimer">🗑</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="7" class="text-center py-5">
+                  <div style="font-size:2.5rem">👤</div>
+                  <div class="text-muted mt-2 fw-semibold">Aucun chauffeur pour ces filtres</div>
+                  <button cButton color="secondary" variant="outline" size="sm" class="mt-2" (click)="resetFilters()">↺ Réinitialiser</button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalItems > itemsPerPage) {
+      <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+        <small class="text-muted">
+          {{ (currentPage-1)*itemsPerPage+1 }}–{{ currentPage*itemsPerPage > totalItems ? totalItems : currentPage*itemsPerPage }}
+          sur {{ totalItems }} chauffeurs
+        </small>
+        <div class="d-flex gap-1">
+          <button class="btn btn-sm btn-outline-secondary" (click)="previousPage()" [disabled]="currentPage === 1">‹</button>
+          <span class="btn btn-sm btn-primary disabled" style="cursor:default;pointer-events:none">{{ currentPage }} / {{ totalPages }}</span>
+          <button class="btn btn-sm btn-outline-secondary" (click)="nextPage()" [disabled]="currentPage === totalPages">›</button>
+        </div>
+      </div>
+    }
+
+  </c-card-body>
+</c-card>

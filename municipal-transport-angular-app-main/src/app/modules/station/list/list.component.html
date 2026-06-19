@@ -1,0 +1,105 @@
+<c-card class="mb-4">
+  <c-card-header class="d-flex justify-content-between align-items-center"
+    style="background: linear-gradient(135deg,#2eb85c,#1a7a3f); color:white">
+    <div class="d-flex align-items-center gap-2">
+      <span style="font-size:1.3rem">📍</span>
+      <strong class="fs-5 mb-0">Gestion des Stations</strong>
+      <c-badge color="light" class="text-dark" shape="rounded-pill">{{ stations.length }}</c-badge>
+    </div>
+    <button cButton color="light" size="sm" variant="outline" routerLink="/stations/add">
+      + Ajouter une station
+    </button>
+  </c-card-header>
+
+  <c-card-body>
+
+    <!-- Recherche + Filtre ville -->
+    @if (!loading && stations.length > 0) {
+      <div class="row mb-3 g-2 align-items-end">
+        <div class="col-md-4">
+          <input cFormControl type="text" placeholder="Rechercher par nom, ville, adresse..."
+            [(ngModel)]="searchTerm" (input)="applySearch()">
+        </div>
+        <div class="col-md-3">
+          <select cSelect [(ngModel)]="filterVille" (change)="applySearch()">
+            <option value="">Toutes les villes</option>
+            <option *ngFor="let v of villes" [value]="v">🏙️ {{ v }}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button cButton color="secondary" variant="outline" size="sm"
+            (click)="searchTerm=''; filterVille=''; applySearch()">↺ Réinitialiser</button>
+        </div>
+      </div>
+    }
+
+    <!-- Chargement -->
+    @if (loading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2 text-muted">Chargement des stations...</p>
+      </div>
+    }
+
+    <!-- État vide -->
+    @else if (stations.length === 0) {
+      <div class="text-center py-5">
+        <div style="font-size:3rem">📍</div>
+        <h6 class="mt-2 text-muted">Aucune station enregistrée</h6>
+        <button cButton color="success" size="sm" routerLink="/stations/add">Ajouter la première station</button>
+      </div>
+    }
+
+    <!-- Tableau -->
+    @else {
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead style="background:#e8f5e9">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Nom</th>
+              <th>Adresse</th>
+              <th>Ville</th>
+              <th class="text-center">🛤️ Lignes</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (s of filteredStations; track s.id) {
+              <tr>
+                <td><c-badge color="secondary" shape="rounded-pill">{{ s.id }}</c-badge></td>
+                <td><span class="fw-semibold">📍 {{ s.nom }}</span></td>
+                <td class="text-muted">{{ s.adresse }}</td>
+                <td>
+                  <c-badge color="success" shape="rounded-pill">🏙️ {{ s.ville }}</c-badge>
+                </td>
+                <td class="text-center">
+                  <c-badge [color]="lignesCount(s.id!) > 0 ? 'primary' : 'secondary'" shape="rounded-pill">
+                    {{ lignesCount(s.id!) }}
+                  </c-badge>
+                </td>
+                <td class="text-end">
+                  <div class="d-flex justify-content-end gap-1">
+                    <button cButton color="info" size="sm" variant="outline"
+                      [routerLink]="['/stations/detail', s.id]" title="Détails">👁</button>
+                    <button cButton color="warning" size="sm" variant="outline"
+                      [routerLink]="['/stations/edit', s.id]" title="Modifier">✏️</button>
+                    <button cButton color="danger" size="sm" variant="outline"
+                      (click)="deleteStation(s.id!)" title="Supprimer">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="6" class="text-center py-4 text-muted">Aucun résultat pour "{{ searchTerm }}"</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+  </c-card-body>
+</c-card>

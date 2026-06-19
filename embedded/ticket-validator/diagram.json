@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "author": "Municipal Transport - Ticket Validator",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-v1", "id": "esp32", "top": 80, "left": 0, "attrs": {} },
+    { "type": "wokwi-lcd1602", "id": "lcd", "top": -80, "left": 20,
+      "attrs": { "pins": "i2c", "address": "0x27" } },
+    { "type": "wokwi-led", "id": "ledGreen", "top": 20, "left": 200,
+      "attrs": { "color": "green" } },
+    { "type": "wokwi-led", "id": "ledRed", "top": 60, "left": 200,
+      "attrs": { "color": "red" } },
+    { "type": "wokwi-resistor", "id": "rg", "top": 20, "left": 160, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "rr", "top": 60, "left": 160, "attrs": { "value": "220" } },
+    { "type": "wokwi-pushbutton", "id": "btn1", "top": 140, "left": -60,
+      "attrs": { "color": "green", "label": "Ticket 1" } },
+    { "type": "wokwi-pushbutton", "id": "btn2", "top": 180, "left": -60,
+      "attrs": { "color": "red",   "label": "Ticket invalide" } }
+  ],
+  "connections": [
+    ["esp32:D21", "lcd:SDA", "blue", []],
+    ["esp32:D22", "lcd:SCL", "yellow", []],
+    ["esp32:3V3", "lcd:VCC", "red", []],
+    ["esp32:GND.1", "lcd:GND", "black", []],
+    ["esp32:D25", "rg:1", "green", []],
+    ["rg:2", "ledGreen:A", "green", []],
+    ["ledGreen:C", "esp32:GND.2", "black", []],
+    ["esp32:D26", "rr:1", "orange", []],
+    ["rr:2", "ledRed:A", "red", []],
+    ["ledRed:C", "esp32:GND.3", "black", []],
+    ["btn1:1.l", "esp32:D32", "purple", []],
+    ["btn1:2.l", "esp32:GND.4", "black", []],
+    ["btn2:1.l", "esp32:D33", "purple", []],
+    ["btn2:2.l", "esp32:GND.5", "black", []]
+  ],
+  "libraries": [
+    { "name": "ArduinoJson",       "version": "6.21.4" },
+    { "name": "LiquidCrystal I2C", "version": "1.1.4" }
+  ]
+}

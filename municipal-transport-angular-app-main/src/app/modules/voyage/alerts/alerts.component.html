@@ -1,0 +1,54 @@
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h4 class="card-title mb-1">Alertes de violence</h4>
+        <p class="text-muted small mb-0">Trajet, chauffeur et heure de détection.</p>
+      </div>
+      <div>
+        <button class="btn btn-outline-secondary me-2" (click)="onRefresh()" [disabled]="loading">Actualiser</button>
+        <a class="btn btn-primary" routerLink="/incidents">Retour à la détection</a>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger d-flex justify-content-between align-items-center">
+      <span>{{ error }}</span>
+      <a *ngIf="!authService.isLoggedIn()" class="btn btn-sm btn-outline-light" routerLink="/login">Se connecter</a>
+    </div>
+    <div *ngIf="loading" class="text-center py-5">Chargement des alertes...</div>
+    <div *ngIf="!loading && alerts.length === 0" class="alert alert-info">Aucune alerte de violence enregistrée pour l'instant.</div>
+
+    <div *ngIf="!loading && alerts.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Date / heure</th>
+            <th>Trajet</th>
+            <th>Chauffeur</th>
+            <th>Résumé</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alert of alerts">
+            <td>{{ alert.detectionTime }}</td>
+            <td>
+              <ng-container *ngIf="alert.voyage; else missingVoyage">
+                {{ alert.voyage.ligne.numero }} → {{ alert.voyage.ligne.destination }}
+              </ng-container>
+              <ng-template #missingVoyage>Voyage #{{ alert.voyageId }} introuvable</ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="alert.voyage?.chauffeur; else missingDriver">
+                {{ alert.voyage?.chauffeur?.nom }} {{ alert.voyage?.chauffeur?.prenom }}
+              </ng-container>
+              <ng-template #missingDriver>Chauffeur inconnu</ng-template>
+            </td>
+            <td>{{ alert.summary }}</td>
+            <td><span class="badge bg-danger text-uppercase">{{ alert.type }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

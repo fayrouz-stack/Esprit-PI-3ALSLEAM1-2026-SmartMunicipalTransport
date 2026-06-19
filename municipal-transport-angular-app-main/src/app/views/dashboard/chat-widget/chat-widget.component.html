@@ -1,0 +1,46 @@
+<div class="chat-widget">
+
+  <!-- Bouton flottant -->
+  <button class="chat-toggle" (click)="toggle()" [class.open]="open" aria-label="Chat">
+    <span *ngIf="!open">💬</span>
+    <span *ngIf="open">✕</span>
+  </button>
+
+  <!-- Panneau -->
+  <div class="chat-panel" *ngIf="open">
+
+    <div class="chat-header">
+      <strong>Assistant Municipal Transport</strong>
+      <small class="d-block text-muted">Powered by Groq + RAG</small>
+    </div>
+
+    <div class="chat-body">
+      <div *ngFor="let m of messages" class="msg" [class.msg-user]="m.role === 'user'" [class.msg-bot]="m.role === 'assistant'">
+        <div class="msg-content">{{ m.content }}</div>
+      </div>
+      <div *ngIf="loading" class="msg msg-bot">
+        <div class="msg-content"><em>L'assistant réfléchit…</em></div>
+      </div>
+    </div>
+
+    <div class="chat-suggestions" *ngIf="messages.length <= 1">
+      <small class="text-muted d-block mb-1">Suggestions :</small>
+      <button *ngFor="let s of suggestions" class="btn btn-sm btn-outline-primary me-1 mb-1" (click)="ask(s)">
+        {{ s }}
+      </button>
+    </div>
+
+    <div class="chat-input">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Posez votre question..."
+        [(ngModel)]="userInput"
+        (keydown.enter)="onEnter($event)"
+        [disabled]="loading" />
+      <button class="btn btn-primary ms-2" (click)="ask()" [disabled]="loading || !userInput.trim()">
+        Envoyer
+      </button>
+    </div>
+  </div>
+</div>

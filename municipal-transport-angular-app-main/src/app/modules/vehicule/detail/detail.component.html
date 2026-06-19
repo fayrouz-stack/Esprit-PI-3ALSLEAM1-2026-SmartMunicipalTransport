@@ -1,0 +1,218 @@
+<c-card class="mb-4">
+  <c-card-header class="d-flex align-items-center gap-2" style="background:linear-gradient(135deg,#321fdb,#1b8eb7);color:white">
+    <span style="font-size:1.3rem">🚌</span>
+    <strong class="fs-5 mb-0">Détails du véhicule</strong>
+    <c-badge color="light" class="ms-auto text-dark" *ngIf="vehicule">{{ vehicule.matriculeFourni }}</c-badge>
+  </c-card-header>
+
+  <c-card-body>
+    @if (loading) {
+      <div class="text-center py-5"><div class="spinner-border text-primary"></div></div>
+    } @else if (errorMsg) {
+      <div class="alert alert-danger d-flex align-items-center gap-2 m-3">
+        <span>⚠️</span> {{ errorMsg }}
+        <button class="btn btn-sm btn-outline-danger ms-auto" (click)="goBack()">← Retour</button>
+      </div>
+    } @else if (vehicule) {
+
+      <!-- Score de santé -->
+      <div class="mb-4 p-3 rounded" style="background:#f8f9fa;border-left:4px solid {{ healthColor }}">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="fw-semibold">💪 Score de santé du véhicule</span>
+          <span class="fw-black fs-5" [style.color]="healthColor">{{ healthScore }}%</span>
+        </div>
+        <div class="progress" style="height:12px;border-radius:8px">
+          <div class="progress-bar" role="progressbar"
+            [style.width]="healthScore + '%'"
+            [style.background]="healthColor">
+          </div>
+        </div>
+        <div class="small mt-1 fw-semibold" [style.color]="healthColor">{{ healthLabel }}</div>
+      </div>
+
+      <!-- Onglets -->
+      <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'info'" (click)="activeTab = 'info'">
+            🚌 Informations
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'iot'" (click)="activeTab = 'iot'">
+            🌡️ IoT / Capteurs
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" [class.active]="activeTab === 'affectations'" (click)="activeTab = 'affectations'">
+            📋 Affectations
+            <c-badge color="primary" shape="rounded-pill" class="ms-1">{{ affectations.length }}</c-badge>
+          </button>
+        </li>
+      </ul>
+
+      <!-- ── Onglet INFO ────────────────────────────────────────────────── -->
+      @if (activeTab === 'info') {
+
+        <!-- Infos principales -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #321fdb">
+              <small class="text-muted text-uppercase fw-semibold">Marque / Modèle</small>
+              <div class="fs-5 fw-bold mt-1">{{ vehicule.marque }} {{ vehicule.modele }}</div>
+              <div class="text-muted small">{{ vehicule.typeVehicule }}</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #2eb85c">
+              <small class="text-muted text-uppercase fw-semibold">État</small>
+              <div class="mt-2"><c-badge [color]="getEtatBadge(vehicule.etat)" style="font-size:.9rem;padding:.4rem .8rem">{{ vehicule.etat }}</c-badge></div>
+              <div class="mt-1"><c-badge [color]="vehicule.vehiculeDispo ? 'success' : 'danger'">{{ vehicule.vehiculeDispo ? '✅ Disponible' : '🚫 Indisponible' }}</c-badge></div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #f9a825">
+              <small class="text-muted text-uppercase fw-semibold">Kilométrage</small>
+              <div class="fs-4 fw-bold mt-1">{{ vehicule.kilometrage | number }} km</div>
+              <div class="text-muted small">⛽ {{ vehicule.carburant }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dates & localisation -->
+        <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #e55353">
+              <small class="text-muted text-uppercase fw-semibold">Fin assurance</small>
+              <div class="mt-1 fw-semibold" [class]="dateClass(vehicule.dateFinAssurance)">{{ dateLabel(vehicule.dateFinAssurance) }}</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #e55353">
+              <small class="text-muted text-uppercase fw-semibold">Prochain CT</small>
+              <div class="mt-1 fw-semibold" [class]="dateClass(vehicule.dateProchainCt)">{{ dateLabel(vehicule.dateProchainCt) }}</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #6c757d">
+              <small class="text-muted text-uppercase fw-semibold">1ère mise en circulation</small>
+              <div class="mt-1">{{ vehicule.datePremiereMiseCirculation | date:'dd/MM/yyyy' }}</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #6f42c1">
+              <small class="text-muted text-uppercase fw-semibold">Validité exploitation</small>
+              <div class="mt-1 fw-semibold" [class]="dateClass(vehicule.dateValiditeExploitation)">{{ dateLabel(vehicule.dateValiditeExploitation) }}</div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="p-3 rounded" style="background:#f8f9fa;border-left:4px solid #1b8eb7">
+              <small class="text-muted text-uppercase fw-semibold">📍 Localisation</small>
+              <div class="mt-1">{{ vehicule.localisation || 'Non renseignée' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carte -->
+        <div class="mb-3">
+          <h6 class="fw-semibold mb-2">📍 Position GPS</h6>
+          <app-vehicule-map [vehicle]="vehicule" [location]="vehicule.localisation"></app-vehicule-map>
+        </div>
+
+        <!-- Calendrier alertes -->
+        <div class="mb-3">
+          <h6 class="fw-semibold mb-2">⚠️ Calendrier des alertes maintenance</h6>
+          <app-vehicule-calendar></app-vehicule-calendar>
+        </div>
+      }
+
+      <!-- ── Onglet IoT ─────────────────────────────────────────────────── -->
+      @if (activeTab === 'iot') {
+        <div *ngIf="telemetrie; else noTelemetrie" class="row g-3">
+          <div class="col-6 col-md-3">
+            <div class="p-3 rounded text-center" style="background:#f8f9fa;border-top:4px solid #e55353">
+              <div class="text-muted small mb-1">🌡️ Température</div>
+              <div class="fs-3 fw-bold" [ngClass]="'text-' + getTempClass()">{{ telemetrie.temperature | number:'1.1-1' }}°C</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 rounded text-center" style="background:#f8f9fa;border-top:4px solid #1b8eb7">
+              <div class="text-muted small mb-1">💧 Humidité</div>
+              <div class="fs-3 fw-bold text-info">{{ telemetrie.humidite | number:'1.0-0' }}%</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 rounded text-center" style="background:#f8f9fa;border-top:4px solid #f9a825">
+              <div class="text-muted small mb-1">💨 Gaz (ADC)</div>
+              <div class="fs-3 fw-bold" [ngClass]="'text-' + getGazClass()">{{ telemetrie.niveauGaz }}</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-3 rounded text-center" style="background:#f8f9fa;border-top:4px solid #6f42c1">
+              <div class="text-muted small mb-1">🔔 Statut</div>
+              <c-badge [color]="telemetrie.alerte ? 'danger' : 'success'" style="font-size:.85rem">
+                {{ telemetrie.alerte ? ('⚠️ ' + telemetrie.typeAlerte) : '✅ Normal' }}
+              </c-badge>
+              <div class="text-muted" style="font-size:.7rem;margin-top:.3rem">{{ telemetrie.dateMesure | date:'HH:mm:ss' }}</div>
+            </div>
+          </div>
+        </div>
+        <ng-template #noTelemetrie>
+          <div class="text-center py-5">
+            <div style="font-size:3rem">📡</div>
+            <p class="text-muted mt-2">Aucune donnée capteur — démarrez le module <strong>cabin-monitor</strong> dans Wokwi.</p>
+          </div>
+        </ng-template>
+      }
+
+      <!-- ── Onglet AFFECTATIONS ─────────────────────────────────────────── -->
+      @if (activeTab === 'affectations') {
+        @if (affectations.length === 0) {
+          <div class="text-center py-5">
+            <div style="font-size:3rem">📋</div>
+            <p class="text-muted mt-2">Aucune affectation pour ce véhicule</p>
+            <button cButton color="primary" size="sm" routerLink="/affectations/add">+ Créer une affectation</button>
+          </div>
+        } @else {
+          <table class="table table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Statut</th>
+                <th>📅 Début</th>
+                <th>📅 Fin</th>
+                <th>🛣️ Ligne</th>
+                <th>📝 Remarque</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (a of affectations; track a.id) {
+                <tr>
+                  <td>
+                    <c-badge [color]="statutColors[a.statut ?? ''] ?? 'secondary'" shape="rounded-pill">
+                      {{ a.statut }}
+                    </c-badge>
+                  </td>
+                  <td class="small">{{ a.dateDebut | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td class="small">{{ a.dateFin | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>
+                    <c-badge color="info" shape="rounded-pill">Ligne {{ a.ligneId }}</c-badge>
+                  </td>
+                  <td class="small text-muted">{{ a.remarque || '—' }}</td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-outline-secondary"
+                      [routerLink]="['/affectations/detail', a.id]" title="Voir">👁</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      }
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button cButton color="secondary" variant="outline" (click)="goBack()">← Retour</button>
+        <button cButton color="warning" variant="outline" [routerLink]="['/vehicules/edit', vehicule.id]">✏️ Modifier</button>
+      </div>
+    }
+  </c-card-body>
+</c-card>

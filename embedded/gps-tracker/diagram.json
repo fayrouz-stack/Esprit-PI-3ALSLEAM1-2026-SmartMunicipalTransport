@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "author": "Municipal Transport GPS Simulation",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-v1",
+      "id": "esp32",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -50,
+      "left": 120,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": -10,
+      "left": 120,
+      "attrs": { "value": "220" }
+    }
+  ],
+  "connections": [
+    ["esp32:D2", "r1:1", "green", []],
+    ["r1:2", "led1:A", "green", []],
+    ["led1:C", "esp32:GND.1", "black", []]
+  ],
+  "libraries": [
+    { "name": "ArduinoJson", "version": "6.21.4" }
+  ]
+}

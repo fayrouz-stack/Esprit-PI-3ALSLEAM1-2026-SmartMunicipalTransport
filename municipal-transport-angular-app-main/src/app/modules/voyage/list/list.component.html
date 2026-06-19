@@ -1,0 +1,153 @@
+<c-card class="mb-4">
+  <c-card-header class="d-flex justify-content-between align-items-center"
+    style="background:linear-gradient(135deg,#321fdb,#2eb85c);color:white;padding:1rem 1.25rem">
+    <div class="d-flex align-items-center gap-2">
+      <span style="font-size:1.4rem">🗺️</span>
+      <strong class="fs-5 mb-0">Gestion des Voyages</strong>
+      <c-badge color="light" class="text-dark ms-1" shape="rounded-pill">{{ filtered.length }}</c-badge>
+    </div>
+    <button cButton color="light" size="sm" routerLink="/voyages/add" style="color:#321fdb;font-weight:600">
+      + Nouveau voyage
+    </button>
+  </c-card-header>
+
+  <c-card-body>
+
+    <!-- KPI cards -->
+    @if (!loading && voyages.length > 0) {
+      <div class="row g-2 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="p-3 rounded text-center" style="background:linear-gradient(135deg,#321fdb22,#2eb85c22);border-left:4px solid #321fdb">
+            <div class="fs-2 fw-black text-primary">{{ stats.total }}</div>
+            <small class="text-muted fw-semibold">🗺️ Total voyages</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 rounded text-center" style="background:#d1fae5;border-left:4px solid #059669">
+            <div class="fs-2 fw-black text-success">{{ stats.disponibles }}</div>
+            <small class="text-muted fw-semibold">✅ Avec places</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 rounded text-center" style="background:#fee2e2;border-left:4px solid #dc2626">
+            <div class="fs-2 fw-black text-danger">{{ stats.complets }}</div>
+            <small class="text-muted fw-semibold">🚫 Complets</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="p-3 rounded text-center" style="background:#f0fff4;border-left:4px solid #2eb85c">
+            <div class="fs-2 fw-black text-success">{{ stats.revenuTotal | number:'1.0-0' }}</div>
+            <small class="text-muted fw-semibold">💰 Rev. potentiel (DT)</small>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Filtres -->
+    <div class="row mb-3 g-2 align-items-end">
+      <div class="col-md-4">
+        <input cFormControl type="text" placeholder="Destination, ligne, chauffeur, matricule..."
+          [(ngModel)]="search" (input)="applyFilters()">
+      </div>
+      <div class="col-md-3">
+        <select cSelect [(ngModel)]="filterLigne" (change)="applyFilters()">
+          <option value="">Toutes les lignes</option>
+          <option *ngFor="let l of lignes" [value]="l.id">{{ l.numero }} — {{ l.destination }}</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select cSelect [(ngModel)]="filterStatut" (change)="applyFilters()">
+          <option value="">Tous statuts</option>
+          <option value="disponible">✅ Places dispo</option>
+          <option value="complet">🚫 Complet</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button cButton color="secondary" variant="outline" class="w-100" (click)="resetFilters()">↺ Reset</button>
+      </div>
+    </div>
+
+    @if (loading) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Chargement des voyages...</p>
+      </div>
+    } @else {
+      <table cTable hover striped responsive>
+        <thead cTableHead color="dark">
+          <tr>
+            <th>#</th>
+            <th>📍 Ligne / Destination</th>
+            <th>📅 Date</th>
+            <th>🕐 Horaire / Durée</th>
+            <th>👤 Chauffeur</th>
+            <th>🚌 Véhicule</th>
+            <th>🪑 Places</th>
+            <th>💰 Revenu pot.</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody cTableBody>
+          @for (v of filtered; track v.id) {
+            <tr>
+              <td><c-badge color="secondary" shape="rounded-pill">{{ v.id }}</c-badge></td>
+              <td>
+                <div class="fw-bold">{{ v.ligne?.destination || 'N/A' }}</div>
+                <small class="text-muted">Ligne {{ v.ligne?.numero }}</small>
+              </td>
+              <td class="fw-semibold">{{ v.dateVoyage | date:'dd/MM/yyyy' }}</td>
+              <td>
+                @if (v.horaire) {
+                  <div class="small">
+                    <span class="text-success fw-bold">{{ v.horaire.horaire_depart | slice:0:5 }}</span>
+                    → <span class="text-danger fw-bold">{{ v.horaire.horaire_arrive | slice:0:5 }}</span>
+                  </div>
+                  <div class="small text-muted">⏳ {{ duree(v.horaire.horaire_depart, v.horaire.horaire_arrive) }}</div>
+                  @if ((v.horaire.retard_estime ?? 0) > 0) {
+                    <c-badge color="danger" shape="rounded-pill" style="font-size:.7rem">
+                      +{{ v.horaire.retard_estime }} min
+                    </c-badge>
+                  }
+                } @else {
+                  <span class="text-muted fst-italic small">—</span>
+                }
+              </td>
+              <td>
+                <div class="fw-semibold">{{ v.chauffeur?.nom }} {{ v.chauffeur?.prenom }}</div>
+                <small class="text-muted">{{ v.chauffeur?.matricule }}</small>
+              </td>
+              <td>
+                <div>{{ v.vehicule?.marque }} {{ v.vehicule?.modele }}</div>
+                <small class="text-muted">{{ v.vehicule?.matriculeFourni }}</small>
+              </td>
+              <td>
+                <c-badge [color]="getPlacesColor(v.nombrePlacesDisponible)" shape="rounded-pill">
+                  {{ v.nombrePlacesDisponible === 0 ? '🚫 Complet' : v.nombrePlacesDisponible + ' pl.' }}
+                </c-badge>
+              </td>
+              <td class="fw-bold text-success">{{ revenu(v) | number:'1.0-0' }} DT</td>
+              <td class="text-end">
+                <div class="d-flex justify-content-end gap-1">
+                  <button cButton color="info" size="sm" variant="outline" [routerLink]="['/voyages/detail', v.id]" title="Détails">👁️</button>
+                  <button cButton color="warning" size="sm" variant="outline" (click)="edit(v.id)" title="Modifier">✏️</button>
+                  <button cButton color="danger" size="sm" variant="outline" (click)="deleteVoyage(v.id)" title="Supprimer">🗑️</button>
+                  <button cButton color="success" size="sm" variant="outline" (click)="goToPayment(v.id)" title="Payer">💳</button>
+                  <a cButton color="danger" size="sm" class="btn" [routerLink]="['/voyages','alerts','add']" [queryParams]="{voyageId: v.id}" title="Signaler">🚨</a>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="9" class="text-center py-5">
+                <div style="font-size:2.5rem">🗺️</div>
+                <div class="text-muted mt-2 fw-semibold">Aucun voyage pour ces filtres</div>
+                <button cButton color="secondary" variant="outline" size="sm" class="mt-2" (click)="resetFilters()">↺ Réinitialiser</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+
+  </c-card-body>
+</c-card>

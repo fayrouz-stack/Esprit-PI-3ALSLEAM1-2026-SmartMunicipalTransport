@@ -1,0 +1,199 @@
+<c-card class="mb-4" style="max-width:750px; margin:auto">
+  <c-card-header class="d-flex align-items-center gap-2"
+    style="background: linear-gradient(135deg,{{ isEdit ? '#f9a825,#e65100' : (autoMode ? '#2e7d32,#43a047' : '#321fdb,#6f42c1') }}); color:white">
+    <span style="font-size:1.3rem">{{ isEdit ? '✏️' : (autoMode ? '✨' : '📋') }}</span>
+    <strong class="fs-5 mb-0">{{ isEdit ? 'Modifier' : (autoMode ? 'Auto-affectation' : 'Créer') }} une affectation</strong>
+  </c-card-header>
+
+  <c-card-body>
+
+    <!-- ── Toggle Manuel / Auto (création uniquement) ── -->
+    @if (!isEdit) {
+      <div class="d-flex justify-content-center mb-4">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn"
+            [class.btn-primary]="!autoMode"
+            [class.btn-outline-primary]="autoMode"
+            (click)="autoMode = false; autoError = ''; errorMsg = ''">
+            📋 Manuel
+          </button>
+          <button type="button" class="btn"
+            [class.btn-success]="autoMode"
+            [class.btn-outline-success]="!autoMode"
+            (click)="autoMode = true; autoError = ''; errorMsg = ''">
+            ✨ Auto
+          </button>
+        </div>
+      </div>
+
+      <!-- Description du mode actif -->
+      @if (autoMode) {
+        <div class="alert alert-success py-2 mb-3" style="font-size:.88rem">
+          <strong>Mode automatique</strong> — Choisissez une ligne et les dates.
+          Le système trouvera le premier chauffeur et véhicule disponibles et créera l'affectation.
+        </div>
+      } @else {
+        <div class="alert alert-light border py-2 mb-3" style="font-size:.88rem">
+          <strong>Mode manuel</strong> — Sélectionnez vous-même le chauffeur, le véhicule et la ligne.
+        </div>
+      }
+    }
+
+    @if (errorMsg) {
+      <div class="alert alert-danger d-flex align-items-center gap-2">
+        <span>⚠️</span> {{ errorMsg }}
+      </div>
+    }
+    @if (autoError) {
+      <div class="alert alert-warning d-flex align-items-center gap-2">
+        <span>🤖</span> {{ autoError }}
+      </div>
+    }
+
+    <form #form="ngForm" (ngSubmit)="save(form)" novalidate>
+
+      <!-- ══ MODE MANUEL : Chauffeur + Véhicule + Ligne ══ -->
+      @if (!autoMode || isEdit) {
+        <div class="p-3 mb-3 rounded" style="background:#ede8ff; border-left:4px solid #321fdb">
+          <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Ressources</h6>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">👤 Chauffeur *</label>
+              <select cSelect name="chauffeurId" [(ngModel)]="affectation.chauffeurId" required
+                [class.is-invalid]="form.submitted && form.controls['chauffeurId']?.invalid">
+                <option [ngValue]="0" disabled>-- Sélectionner --</option>
+                <option *ngFor="let c of chauffeurs" [ngValue]="c.id">
+                  {{ c.prenom }} {{ c.nom }} ({{ c.matricule }})
+                </option>
+              </select>
+              <div class="invalid-feedback">Chauffeur requis</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">🚌 Véhicule *</label>
+              <select cSelect name="vehiculeId" [(ngModel)]="affectation.vehiculeId" required
+                [class.is-invalid]="form.submitted && form.controls['vehiculeId']?.invalid">
+                <option [ngValue]="0" disabled>-- Sélectionner --</option>
+                <option *ngFor="let v of vehicules" [ngValue]="v.id">
+                  {{ v.marque }} {{ v.modele }} ({{ v.matriculeFourni }})
+                  <span *ngIf="!v.vehiculeDispo"> — INDISPONIBLE</span>
+                </option>
+              </select>
+              <div class="invalid-feedback">Véhicule requis</div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">🛤️ Ligne *</label>
+              <select cSelect name="ligneId" [(ngModel)]="affectation.ligneId" required
+                [class.is-invalid]="form.submitted && form.controls['ligneId']?.invalid">
+                <option [ngValue]="0" disabled>-- Sélectionner --</option>
+                <option *ngFor="let l of lignes" [ngValue]="l.id">
+                  {{ l.numero }} — {{ l.destination }}
+                </option>
+              </select>
+              <div class="invalid-feedback">Ligne requise</div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ══ MODE AUTO : Ligne uniquement ══ -->
+      @if (autoMode && !isEdit) {
+        <div class="p-3 mb-3 rounded" style="background:#e8f5e9; border-left:4px solid #43a047">
+          <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Ligne de service</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">🛤️ Ligne *</label>
+              <select cSelect name="ligneIdAuto" [(ngModel)]="affectation.ligneId" required>
+                <option [ngValue]="0" disabled>-- Sélectionner une ligne --</option>
+                <option *ngFor="let l of lignes" [ngValue]="l.id">
+                  {{ l.numero }} — {{ l.destination }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <!-- Checklist des 3 étapes requises -->
+              <div class="d-flex flex-column gap-1" style="font-size:.85rem">
+                <span [style.color]="affectation.ligneId ? '#2e7d32' : '#c62828'">
+                  {{ affectation.ligneId ? '✅' : '⬜' }} Ligne sélectionnée
+                </span>
+                <span [style.color]="affectation.dateDebut ? '#2e7d32' : '#c62828'">
+                  {{ affectation.dateDebut ? '✅' : '⬜' }} Date de début
+                </span>
+                <span [style.color]="affectation.dateFin ? '#2e7d32' : '#c62828'">
+                  {{ affectation.dateFin ? '✅' : '⬜' }} Date de fin
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Période -->
+      <div class="p-3 mb-3 rounded" style="background:#fff8e1; border-left:4px solid #f9a825">
+        <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Période</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">📅 Date début *</label>
+            <input cFormControl type="datetime-local" name="dateDebut"
+              [(ngModel)]="affectation.dateDebut" required
+              [class.is-invalid]="form.submitted && !autoMode && form.controls['dateDebut']?.invalid">
+            <div class="invalid-feedback">Date de début requise</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">📅 Date fin *</label>
+            <input cFormControl type="datetime-local" name="dateFin"
+              [(ngModel)]="affectation.dateFin" required
+              [class.is-invalid]="form.submitted && !autoMode && form.controls['dateFin']?.invalid">
+            <div class="invalid-feedback">Date de fin requise</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paramètres (mode manuel ou édition) -->
+      @if (!autoMode || isEdit) {
+        <div class="p-3 mb-4 rounded" style="background:#f8f9fa; border-left:4px solid #6c757d">
+          <h6 class="text-muted text-uppercase mb-3" style="font-size:.75rem; letter-spacing:.05em">Paramètres</h6>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Statut</label>
+              <select cSelect name="statut" [(ngModel)]="affectation.statut">
+                <option value="PLANIFIEE">Planifiée</option>
+                <option value="EN_COURS">En cours</option>
+                <option value="TERMINEE">Terminée</option>
+                <option value="ANNULEE">Annulée</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">💬 Remarque</label>
+              <textarea cFormControl name="remarque" [(ngModel)]="affectation.remarque"
+                rows="2" placeholder="Observations éventuelles..."></textarea>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Boutons d'action -->
+      <div class="d-flex justify-content-end gap-2">
+        <button cButton color="secondary" type="button" routerLink="/affectations">Annuler</button>
+
+        @if (autoMode && !isEdit) {
+          <!-- Bouton Auto -->
+          <button cButton color="success" type="button"
+                  [disabled]="autoAssigning" (click)="autoAssign()">
+            @if (autoAssigning) {
+              <span class="spinner-border spinner-border-sm me-1" role="status"></span> Recherche en cours...
+            } @else {
+              ✨ Lancer l'auto-affectation
+            }
+          </button>
+        } @else {
+          <!-- Bouton Manuel / Édition -->
+          <button cButton [color]="isEdit ? 'warning' : 'primary'" type="submit" [disabled]="loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ loading ? 'Sauvegarde...' : (isEdit ? '💾 Mettre à jour' : '✅ Créer l\'affectation') }}
+          </button>
+        }
+      </div>
+
+    </form>
+  </c-card-body>
+</c-card>

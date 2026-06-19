@@ -1,0 +1,549 @@
+<app-docs-components href="components/widgets" title="Widgets" />
+
+<c-card class="mb-4">
+  <c-card-header>Tableau de bord - Gestion de flotte</c-card-header>
+  <c-card-body>
+    <app-docs-example href="components/widgets/#cwidgetstatsa">
+      <app-widgets-dropdown />
+    </app-docs-example>
+    
+    <!-- Statistiques flotte - Version standard -->
+    <app-docs-example href="components/widgets/#cwidgetstatsb">
+      <c-row class="g-4">
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            [title]="'Véhicules'"
+            text="Véhicules en circulation"
+            value="42"
+          >
+            <c-progress class="my-2" thin [value]="75" color="success" />
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            [title]="'Chauffeurs'"
+            text="Chauffeurs actifs"
+            value="38"
+          >
+            <c-progress class="my-2" thin [value]="68" color="info" />
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            [title]="'Voyages'"
+            text="Voyages ce mois"
+            value="1,247"
+          >
+            <c-progress class="my-2" thin [value]="82" color="warning" />
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            [title]="'Kilométrage'"
+            text="Km parcourus (mois)"
+            value="15,432 km"
+          >
+            <c-progress class="my-2" thin [value]="64" color="primary" />
+          </c-widget-stat-b>
+        </c-col>
+      </c-row>
+    </app-docs-example>
+    
+    <!-- Statistiques flotte - Version inversée avec fond coloré -->
+    <app-docs-example href="components/widgets/#cwidgetstatsb">
+      <c-row class="g-4">
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            #widgetStatB1inv="cWidgetStatB"
+            [title]="'Véhicules actifs'"
+            color="success"
+            inverse
+            text="+12% ce mois"
+            value="42"
+          >
+            <c-progress [white]="widgetStatB1inv.inverse()" class="my-2" thin [value]="75" />
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            #widgetStatB2inv="cWidgetStatB"
+            [title]="'Chauffeurs'"
+            color="info"
+            inverse
+            text="+5 nouveaux"
+            value="38"
+          >
+            <c-progress [white]="widgetStatB2inv.inverse()" class="my-2" thin [value]="68" />
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            #widgetStatB3inv="cWidgetStatB"
+            [title]="'Voyages'"
+            color="warning"
+            inverse
+            text="+18% vs mois dernier"
+            value="1,247"
+          >
+            <c-progress [white]="widgetStatB3inv.inverse()" class="my-2" thin [value]="82" />
+          </c-widget-stat-b>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-b
+            #widgetStatB4inv="cWidgetStatB"
+            [title]="'Kilométrage'"
+            color="primary"
+            inverse
+            text="Objectif: 20,000 km"
+            value="15,432 km"
+          >
+            <c-progress [white]="widgetStatB4inv.inverse()" class="my-2" thin [value]="64" />
+          </c-widget-stat-b>
+        </c-col>
+      </c-row>
+    </app-docs-example>
+    
+    <app-docs-example href="components/widgets/#cwidgetstatse">
+      <app-widgets-e />
+    </app-docs-example>
+    
+    <!-- Widgets statistiques avec icônes -->
+    <app-docs-example href="components/widgets/#cwidgetstatsf">
+      <c-row class="g-4">
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Véhicules'"
+            color="primary"
+            padding
+            value="42"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilTruck" size="xl" width="24"></svg>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Chauffeurs'"
+            color="info"
+            padding
+            value="38"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilPeople" size="xl" width="24"></svg>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Voyages'"
+            color="warning"
+            padding
+            value="1,247"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilMap" size="xl" width="24"></svg>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Kilométrage'"
+            color="danger"
+            padding
+            value="15,432 km"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilSpeedometer" size="xl" width="24"></svg>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+      </c-row>
+    </app-docs-example>
+    
+    <!-- Widgets statistiques avec footer -->
+    <app-docs-example href="components/widgets/#cwidgetstatsf">
+      <c-row class="g-4">
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Véhicules'"
+            color="primary"
+            padding
+            value="42"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilTruck" size="xl" width="24"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetFooterTemplate">
+              <a class="font-weight-bold font-xs text-body-secondary"
+                 href="/vehicles"
+                 rel="noopener norefferer">
+                Voir détails
+                <svg cIcon class="float-end" name="cilArrowRight" width="16"></svg>
+              </a>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Chauffeurs'"
+            color="info"
+            padding
+            value="38"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilPeople" size="xl" width="24"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetFooterTemplate">
+              <a class="font-weight-bold font-xs text-body-secondary"
+                 href="/drivers"
+                 rel="noopener norefferer">
+                Gérer les chauffeurs
+                <svg cIcon class="float-end" name="cilArrowRight" width="16"></svg>
+              </a>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Entretien'"
+            color="warning"
+            padding
+            value="3"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilSettings" size="xl" width="24"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetFooterTemplate">
+              <a class="font-weight-bold font-xs text-body-secondary"
+                 href="/maintenance"
+                 rel="noopener norefferer">
+                Vidanges prévues
+                <svg cIcon class="float-end" name="cilArrowRight" width="16"></svg>
+              </a>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Alertes'"
+            color="danger"
+            padding
+            value="5"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilBell" size="xl" width="24"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetFooterTemplate">
+              <a class="font-weight-bold font-xs text-body-secondary"
+                 href="/alerts"
+                 rel="noopener norefferer">
+                Voir les alertes
+                <svg cIcon class="float-end" name="cilArrowRight" width="16"></svg>
+              </a>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+      </c-row>
+    </app-docs-example>
+    
+    <!-- Widgets sans padding -->
+    <app-docs-example href="components/widgets/#cwidgetstatsf">
+      <c-row class="g-4">
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Véhicules'"
+            color="primary"
+            value="42"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilTruck" size="xl" width="24"></svg>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Chauffeurs'"
+            color="info"
+            value="38"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilPeople" size="xl" width="24"></svg>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Voyages'"
+            color="warning"
+            value="1,247"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilMap" size="xl" width="24"></svg>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+        <c-col xl="3" md="6" sm="6">
+          <c-widget-stat-f
+            [title]="'Carburant'"
+            color="danger"
+            value="2,450 L"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon name="cilDroplet" size="xl" width="24" class="rounded-5"></svg>
+            </ng-template>
+          </c-widget-stat-f>
+        </c-col>
+      </c-row>
+    </app-docs-example>
+
+    <!-- Widgets Brand (à remplacer par vos stats flotte) -->
+    <app-docs-example href="components/widgets/#cwidgetstatsd">
+      <app-widgets-brand />
+    </app-docs-example>
+    <app-docs-example href="components/widgets/#cwidgetstatsd">
+      <app-widgets-brand [withCharts]="true" />
+    </app-docs-example>
+
+    <!-- Widgets statistiques C - Version large -->
+    <app-docs-example href="components/widgets/#cwidgetstatsc">
+      <c-card-group class="mb-4">
+        <c-widget-stat-c
+          [title]="'Véhicules'"
+          value="42"
+        >
+          <ng-template cTemplateId="widgetIconTemplate">
+            <svg cIcon height="36" name="cilTruck"></svg>
+          </ng-template>
+          <ng-template cTemplateId="widgetProgressTemplate">
+            <c-progress class="mt-3 mb-0" thin [value]="75" color="info" />
+          </ng-template>
+        </c-widget-stat-c>
+        <c-widget-stat-c
+          [title]="'Chauffeurs'"
+          value="38"
+        >
+          <ng-template cTemplateId="widgetIconTemplate">
+            <svg cIcon height="36" name="cilPeople"></svg>
+          </ng-template>
+          <ng-template cTemplateId="widgetProgressTemplate">
+            <c-progress class="mt-3 mb-0" thin [value]="68" color="success" />
+          </ng-template>
+        </c-widget-stat-c>
+        <c-widget-stat-c
+          [title]="'Voyages'"
+          value="1,247"
+        >
+          <ng-template cTemplateId="widgetIconTemplate">
+            <svg cIcon height="36" name="cilMap"></svg>
+          </ng-template>
+          <ng-template cTemplateId="widgetProgressTemplate">
+            <c-progress class="mt-3 mb-0" thin [value]="82" color="warning" />
+          </ng-template>
+        </c-widget-stat-c>
+        <c-widget-stat-c
+          [title]="'Ponctualité'"
+          value="94%"
+        >
+          <ng-template cTemplateId="widgetIconTemplate">
+            <svg cIcon height="36" name="cilClock"></svg>
+          </ng-template>
+          <ng-template cTemplateId="widgetProgressTemplate">
+            <c-progress class="mt-3 mb-0" thin [value]="94" color="primary" />
+          </ng-template>
+        </c-widget-stat-c>
+        <c-widget-stat-c
+          [title]="'Kilométrage'"
+          value="15,432 km"
+        >
+          <ng-template cTemplateId="widgetIconTemplate">
+            <svg cIcon height="36" name="cilSpeedometer"></svg>
+          </ng-template>
+          <ng-template cTemplateId="widgetProgressTemplate">
+            <c-progress class="mt-3 mb-0" thin [value]="64" color="danger" />
+          </ng-template>
+        </c-widget-stat-c>
+      </c-card-group>
+    </app-docs-example>
+    
+    <!-- Widgets statistiques C - Version grille responsive -->
+    <app-docs-example href="components/widgets/#cwidgetstatsc">
+      <c-row class="g-4">
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Véhicules'"
+            value="42"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilTruck"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin [value]="75" color="info" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Chauffeurs'"
+            value="38"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilPeople"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin [value]="68" color="success" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Voyages'"
+            value="1,247"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilMap"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin [value]="82" color="warning" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Ponctualité'"
+            value="94%"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilClock"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin [value]="94" color="primary" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Kilométrage'"
+            value="15,432 km"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilSpeedometer"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin [value]="64" color="danger" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Alertes'"
+            value="5"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilBell"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin [value]="15" color="dark" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+      </c-row>
+    </app-docs-example>
+    
+    <!-- Widgets statistiques C - Version inversée -->
+    <app-docs-example href="components/widgets/#cwidgetstatsc">
+      <c-row class="g-4">
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Véhicules'"
+            color="info"
+            inverse
+            value="42"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilTruck"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin white [value]="75" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Chauffeurs'"
+            color="success"
+            inverse
+            value="38"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilPeople"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin white [value]="68" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Voyages'"
+            color="warning"
+            inverse
+            value="1,247"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilMap"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin white [value]="82" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Ponctualité'"
+            color="primary"
+            inverse
+            value="94%"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilClock"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin white [value]="94" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Kilométrage'"
+            color="danger"
+            inverse
+            value="15,432 km"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilSpeedometer"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin white [value]="64" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+        <c-col xl="2" lg="4" sm="6">
+          <c-widget-stat-c
+            [title]="'Carburant'"
+            color="dark"
+            inverse
+            value="2,450 L"
+          >
+            <ng-template cTemplateId="widgetIconTemplate">
+              <svg cIcon height="36" name="cilDroplet"></svg>
+            </ng-template>
+            <ng-template cTemplateId="widgetProgressTemplate">
+              <c-progress class="mt-3 mb-0" thin white [value]="55" />
+            </ng-template>
+          </c-widget-stat-c>
+        </c-col>
+      </c-row>
+    </app-docs-example>
+  </c-card-body>
+</c-card>

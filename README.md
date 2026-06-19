@@ -1,8 +1,16 @@
-# Guide de lancement — Municipal Transport
+# 🚌 Municipal Transport System
 
-Application de gestion du transport urbain municipal.  
-Stack : **Angular 21** (frontend) · **Spring Boot 3.4.5** (backend) · **PostgreSQL 16** (base de données) · **Docker Compose** (orchestration).
+## Description
+Smart Municipal Transport System est une application de gestion du transport urbain municipal. Elle permet de gérer les chauffeurs, véhicules, lignes, stations, horaires, voyages et tickets etc.
 
+## Technologies utilisées
+- **Frontend** : Angular 21
+- **Backend** : Spring Boot 3.4.5
+- **Base de données** : PostgreSQL 16
+- **Orchestration** : Docker Compose
+
+## Auteurs
+- **Votre Nom** --- 3ALSLEAM1 --- 2025-2026 --- Tuteur : [Sana Ben Fadhel-Ichraf Ayari]
 ---
 
 ## Prérequis

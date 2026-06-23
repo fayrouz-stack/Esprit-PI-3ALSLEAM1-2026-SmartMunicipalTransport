@@ -10,7 +10,7 @@ Smart Municipal Transport System est une application de gestion du transport urb
 - **Orchestration** : Docker Compose
 
 ## Auteurs
-- **Votre Nom** --- 3ALSLEAM1 --- 2025-2026 --- Tuteur : [Sana Ben Fadhel-Ichraf Ayari]
+- **Fayrouz Boughdiri/Houyem Msellmi/Mayssa Oueslati/Aymen Chmengui/Mohamed Slaimi/Khalil Hechmi** --- 3ALSLEAM1 --- 2025-2026 --- Tuteur : [Sana Ben Fadhel-Ichraf Ayari]
 ---
 
 ## Prérequis
